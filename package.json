@@ -51,7 +51,6 @@
     ]
   },
   "scripts": {
-    "postinstall": "(cd ./functions && yarn install --no-lockfile)",
     "precommit": "lint-staged",
     "flow": "flow",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" . && stylelint \"src/**/*.js\"",
