@@ -15,7 +15,6 @@ import styled from 'styled-components';
 
 import auth from '../../auth';
 import history from '../../history';
-import Link from '../../components/Link';
 import LoginDialog from './LoginDialog';
 
 const Title = styled(Typography)`

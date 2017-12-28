@@ -25,9 +25,7 @@ class PresentationList extends Component {
         </Toolbar>
         <List>
           {presentations.docs.map(doc => (
-            <PresentationListItem
-              key={doc.id}
-              presentation={doc} />
+            <PresentationListItem key={doc.id} presentation={doc} />
           ))}
         </List>
       </Container>

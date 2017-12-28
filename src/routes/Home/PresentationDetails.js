@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { activePresentation } from '../../store';
+// import { activePresentation } from '../../store';
 import { observer } from 'mobx-react';
 import Button from 'material-ui/Button';
 import Toolbar from 'material-ui/Toolbar';
