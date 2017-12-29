@@ -2,13 +2,13 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import { presentations, activePresentation } from '../../store';
 import PresentationList from './PresentationList';
 import PresentationDetails from './PresentationDetails';
 
 const Container = styled.div`
   display: flex;
-  width: 100%;
-  height: 100%;
+  flex: 1;
   flex-direction: row;
 `;
 
@@ -16,8 +16,8 @@ class Home extends React.Component<{}> {
   render() {
     return (
       <Container>
-        <PresentationList />
-        <PresentationDetails />
+        <PresentationList presentations={presentations} />
+        <PresentationDetails presentation={activePresentation} />
       </Container>
     );
   }

@@ -8,29 +8,12 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import firebase from '@firebase/app';
-import 'firebase/firestore';
-import { initFirestorter } from 'firestorter';
-
+import './store';
 import App from './components/App';
 import auth from './auth';
 import history from './history';
 import routes from './routes';
 import registerServiceWorker from './registerServiceWorker';
-
-firebase.initializeApp({
-  apiKey: 'AIzaSyA1IoyYNh9knR_enXTikdaNPAc1JYoUDSg',
-  authDomain: 'ttvflash-2b993.firebaseapp.com',
-  databaseURL: 'https://ttvflash-2b993.firebaseio.com',
-  projectId: 'ttvflash-2b993',
-  storageBucket: '',
-  messagingSenderId: '797892172085',
-});
-
-// Initialize `firestorter`
-initFirestorter({
-  firebase: firebase,
-});
 
 const render = props =>
   new Promise((resolve, reject) => {

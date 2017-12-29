@@ -64,7 +64,7 @@ class Toolbar extends React.Component<{}, {}> {
           {this.props.user && (
             <React.Fragment>
               <Button color="inherit" onClick={this.goToAccount}>
-                {this.props.user.displayName}
+                {this.props.user.displayName || ''}
               </Button>
               <Button color="inherit" onClick={auth.signOut}>
                 Afmelden

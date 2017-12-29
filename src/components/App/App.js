@@ -1,9 +1,3 @@
-/**
- * React Starter Kit for Firebase and GraphQL
- * https://github.com/kriasoft/react-firebase-starter
- * Copyright (c) 2015-present Kriasoft | MIT License
- */
-
 /* @flow */
 
 import React from 'react';
@@ -14,7 +8,9 @@ import theme from '../../theme';
 import Toolbar from './Toolbar';
 
 const Container = styled.div`
+  display: flex;
   height: 100vh;
+  flex-direction: column;
 `;
 
 class App extends React.Component<{}> {

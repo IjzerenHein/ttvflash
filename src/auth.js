@@ -12,9 +12,13 @@ import firebase from '@firebase/app';
 const callbacks = new Set();
 
 export default {
-  signIn() {
+  signInWithFacebook() {
     const provider = new firebase.auth.FacebookAuthProvider();
     return firebase.auth().signInWithPopup(provider);
+  },
+
+  signInWithEmailAndPassword(username, password) {
+    return firebase.auth().signInWithEmailAndPassword(username, password);
   },
 
   signOut() {
