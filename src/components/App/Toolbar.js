@@ -25,10 +25,6 @@ const Title = styled(Typography)`
   }
 `;
 
-function goHome() {
-  history.push('/');
-}
-
 function goAdmin() {
   history.push('/admin');
 }
