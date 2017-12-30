@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { ListItem, ListItemText } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import TVIcon from 'material-ui-icons/Tv';
+import StarIcon from 'material-ui-icons/Star';
 import history from '../../history';
 import { grey } from 'material-ui/colors';
 
@@ -11,10 +12,11 @@ class PresentationListItem extends Component {
   static propTypes = {
     presentation: PropTypes.any.isRequired,
     selected: PropTypes.bool,
+    isDefault: PropTypes.bool,
   };
 
   render() {
-    const { presentation, selected } = this.props;
+    const { presentation, selected, isDefault } = this.props;
     const { name, delay } = presentation.data;
     return (
       <ListItem
@@ -26,6 +28,7 @@ class PresentationListItem extends Component {
           <TVIcon />
         </Avatar>
         <ListItemText primary={name || ''} secondary={delay + ' sec'} />
+        {isDefault && <StarIcon color="primary" />}
       </ListItem>
     );
   }

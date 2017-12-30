@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { activePresentation, loggedInUser } from '../../store';
+import {
+  activePresentation,
+  presentations,
+  defaultPresentationSetting,
+  loggedInUser,
+} from '../../store';
 import { observer } from 'mobx-react';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
@@ -23,10 +27,6 @@ const Title = styled(Typography)`
 `;
 
 class PresentationList extends Component {
-  static propTypes = {
-    presentations: PropTypes.any,
-  };
-
   render() {
     return (
       <Container>
@@ -45,11 +45,14 @@ class PresentationList extends Component {
           </Toolbar>
         </AppBar>
         <List>
-          {this.props.presentations.docs.map(doc => (
+          {presentations.docs.map(doc => (
             <PresentationListItem
               key={doc.id}
               presentation={doc}
               selected={doc.id === activePresentation.id}
+              isDefault={
+                doc.id === defaultPresentationSetting.data.presentationId
+              }
             />
           ))}
         </List>
@@ -59,7 +62,7 @@ class PresentationList extends Component {
 
   onClickAdd = async () => {
     try {
-      await this.props.presentations.add({
+      await presentations.add({
         url: '',
         name: 'Nieuwe Presentatie',
         delay: 6,

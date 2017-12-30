@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { loggedInUser } from '../../store';
+import {
+  loggedInUser,
+  activePresentation,
+  defaultPresentationSetting,
+} from '../../store';
 import { observer } from 'mobx-react';
 import Card from 'material-ui/Card';
+import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
 import DeleteIcon from 'material-ui-icons/Delete';
 import TVIcon from 'material-ui-icons/Tv';
 import LinkIcon from 'material-ui-icons/Link';
-import DelayIcon from 'material-ui-icons/SlowMotionVideo';
+import RefreshIcon from 'material-ui-icons/Refresh';
 // import OpenIcon from 'material-ui-icons/OpenInNew';
 import ControlledTextField from '../../components/ControlledTextField/ControlledTextField';
 import Dialog, {
@@ -18,7 +22,9 @@ import Dialog, {
   DialogContent,
   DialogContentText,
 } from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
 import PresentationPreview from '../Home/PresentationPreview';
 
 const Container = styled(Card)`
@@ -27,10 +33,14 @@ const Container = styled(Card)`
   flex-direction: column;
 `;
 
+const Title = styled(Typography)`
+  flex: 1;
+`;
+
 const Row = styled.div`
   display: flex;
   height: 64px;
-  padding: 0 20px 0 20px;
+  padding: 5px 20px 5px 20px;
   flex-direction: row;
   align-items: center;
 `;
@@ -43,23 +53,56 @@ const Input = styled(ControlledTextField)`
   flex: 1;
 `;
 
-class PresentationDetails extends Component {
-  static propTypes = {
-    presentation: PropTypes.any,
-  };
+const DelayInput = styled(ControlledTextField)`
+  width: 120px;
+`;
 
+const StandardButton = styled(Button)`
+  margin: 0 10px 0 20px;
+`;
+
+class PresentationDetails extends Component {
   state = {
     deleteDialogOpen: false,
   };
 
   render() {
-    const { presentation } = this.props;
+    const presentation = activePresentation;
     const { deleteDialogOpen } = this.state;
     const disabled = loggedInUser.get() ? false : true;
     if (!presentation || !presentation.ref) return <Container />;
     const { name, url, delay } = presentation.data;
+    const isDefault =
+      presentation.id === defaultPresentationSetting.data.presentationId;
     return (
       <Container>
+        <AppBar position="static" color="default">
+          <Toolbar>
+            <Title type="title" color="inherit">
+              {'Presentatie' + (isDefault ? ' (Standaard)' : '')}
+            </Title>
+            {!disabled && (
+              <StandardButton
+                raised
+                disabled={isDefault}
+                color="primary"
+                onClick={this.onClickMakeDefault}
+              >
+                Stel in als standaard
+              </StandardButton>
+            )}
+            {!disabled && (
+              <IconButton aria-label="Ververs" onClick={this.onClickRefresh}>
+                <RefreshIcon />
+              </IconButton>
+            )}
+            {!disabled && (
+              <IconButton aria-label="Verwijder" onClick={this.onClickDelete}>
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </Toolbar>
+        </AppBar>
         <Row>
           <Logo>
             <TVIcon />
@@ -71,15 +114,14 @@ class PresentationDetails extends Component {
             value={name || ''}
             onChange={event => this.onChangeValue('name', event)}
           />
-          {!disabled && (
-            <IconButton
-              aria-label="Verwijder"
-              color="accent"
-              onClick={this.onClickDelete}
-            >
-              <DeleteIcon />
-            </IconButton>
-          )}
+          <DelayInput
+            id="delay"
+            type="number"
+            label="Wachttijd (sec)"
+            disabled={disabled}
+            value={delay || ''}
+            onChange={event => this.onChangeValue('delay', event)}
+          />
         </Row>
         <Row>
           <Logo>
@@ -99,19 +141,6 @@ class PresentationDetails extends Component {
           >
             <OpenIcon />
           </IconButton>*/}
-        </Row>
-        <Row>
-          <Logo>
-            <DelayIcon />
-          </Logo>
-          <Input
-            id="delay"
-            type="number"
-            label="Wachttijd (tussen de pagina's)"
-            disabled={disabled}
-            value={delay || ''}
-            onChange={event => this.onChangeValue('delay', event)}
-          />
         </Row>
         <PresentationPreview presentation={presentation} />
         <Dialog
@@ -149,7 +178,7 @@ class PresentationDetails extends Component {
 
     const fields = {};
     fields[field] = value;
-    await this.props.presentation.update(fields);
+    await activePresentation.update(fields);
   }
 
   onClickDelete = () => {
@@ -168,19 +197,30 @@ class PresentationDetails extends Component {
     this.setState({
       deleteDialogOpen: false,
     });
-    const { presentation } = this.props;
     if (this._deleting) return;
     this._deleting = true;
     try {
-      await presentation.delete();
+      await activePresentation.delete();
       this._deleting = false;
     } catch (err) {
       this._deleting = false;
     }
   };
 
+  onClickMakeDefault = () => {
+    defaultPresentationSetting.update({
+      presentationId: activePresentation.id,
+    });
+  };
+
+  onClickRefresh = () => {
+    activePresentation.update({
+      refreshTime: Date.now(),
+    });
+  };
+
   /*onClickUrl = () => {
-    window.open(this.props.presentation.data.url, '_blank');
+    window.open(activePresentation.data.url, '_blank');
   };*/
 }
 

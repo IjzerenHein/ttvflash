@@ -2,7 +2,6 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { presentations, activePresentation } from '../../store';
 import PresentationList from './PresentationList';
 import PresentationDetails from './PresentationDetails';
 
@@ -16,8 +15,8 @@ class Admin extends React.Component<{}> {
   render() {
     return (
       <Container>
-        <PresentationList presentations={presentations} />
-        <PresentationDetails presentation={activePresentation} />
+        <PresentationList />
+        <PresentationDetails />
       </Container>
     );
   }

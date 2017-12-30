@@ -28,12 +28,36 @@ class PresentationPreview extends Component {
     presentation: PropTypes.any.isRequired,
   };
 
+  state = {
+    refreshTime: 0,
+  };
+
+  componentDidMount() {
+    let hour = new Date().getHours();
+    this._timer = setInterval(() => {
+      const newHour = new Date().getHours();
+      if (hour < 6 && newHour >= 6) {
+        this.setState({
+          refreshTime: Date.now(),
+        });
+      }
+      hour = newHour;
+    }, 1000 * 60 * 60 * 3);
+  }
+
+  componentWillUnmount() {
+    if (this._timer) {
+      clearInterval(this._timer);
+      this._timer = undefined;
+    }
+  }
+
   getUrl() {
     const { presentation } = this.props;
-    const { url, delay } = presentation.data;
+    const { url, delay, refreshTime } = presentation.data;
     if (!url) return url;
     const { protocol, resource, pathname } = parseUrl(url);
-
+    const refreshTime2 = Math.max(this.state.refreshTime, refreshTime || 0);
     switch (resource) {
       case 'docs.google.com': {
         let path = pathname;
@@ -44,7 +68,7 @@ class PresentationPreview extends Component {
           path += '/embed';
         }
         return `${protocol}://${resource}/${path}?start=true&loop=true&delayms=${(delay ||
-          0) * 1000}`;
+          0) * 1000}&refreshTime=${refreshTime2}`;
       }
       default:
         return ''; // url;
