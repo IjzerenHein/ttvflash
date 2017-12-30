@@ -36,9 +36,13 @@ class PresentationPreview extends Component {
 
     switch (resource) {
       case 'docs.google.com': {
-        const path = pathname.endsWith('/embed')
-          ? pathname
-          : pathname + '/embed';
+        let path = pathname;
+        if (path.endsWith('/pub')) {
+          path = path.substring(0, path.length - 4);
+        }
+        if (!path.endsWith('/embed')) {
+          path += '/embed';
+        }
         return `${protocol}://${resource}/${path}?start=true&loop=true&delayms=${(delay ||
           0) * 1000}`;
       }

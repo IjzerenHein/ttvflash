@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { MuiThemeProvider } from 'material-ui/styles';
 
 import theme from '../../theme';
-import Toolbar from './Toolbar';
 
 const Container = styled.div`
   display: flex;
@@ -26,7 +25,7 @@ class App extends React.Component<{}> {
     return (
       <MuiThemeProvider theme={theme}>
         <Container>
-          <Toolbar user={this.props.user} />
+          {this.props.route.toolbar}
           {this.props.route.body}
         </Container>
       </MuiThemeProvider>

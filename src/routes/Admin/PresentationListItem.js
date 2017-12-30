@@ -31,7 +31,7 @@ class PresentationListItem extends Component {
   }
 
   onClick = () => {
-    history.push('/presentation/' + this.props.presentation.id);
+    history.push('/admin/presentation/' + this.props.presentation.id);
   };
 }
 

@@ -7,7 +7,6 @@ import Card from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
 import DeleteIcon from 'material-ui-icons/Delete';
-import PresentationPreview from './PresentationPreview';
 import TVIcon from 'material-ui-icons/Tv';
 import LinkIcon from 'material-ui-icons/Link';
 import DelayIcon from 'material-ui-icons/SlowMotionVideo';
@@ -20,6 +19,7 @@ import Dialog, {
   DialogContentText,
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import PresentationPreview from '../Home/PresentationPreview';
 
 const Container = styled(Card)`
   flex: 1;
@@ -87,7 +87,7 @@ class PresentationDetails extends Component {
           </Logo>
           <Input
             id="url"
-            label="Url (bijv: docs.google.com/..)"
+            label="Url (https://docs.google.com/presentation/../embed)"
             disabled={disabled}
             value={url || ''}
             onChange={event => this.onChangeValue('url', event)}

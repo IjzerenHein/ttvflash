@@ -5,7 +5,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "firebase": "^4.8.1",
-    "firestorter": "^0.8.1",
+    "firestorter": "^0.8.2",
     "history": "^4.7.2",
     "lodash": "^4.17.4",
     "material-ui": "1.0.0-beta.24",

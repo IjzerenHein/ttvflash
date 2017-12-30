@@ -29,6 +29,10 @@ function goHome() {
   history.push('/');
 }
 
+function goAdmin() {
+  history.push('/admin');
+}
+
 class Toolbar extends React.Component<{}, {}> {
   state = {
     loginOpen: false,
@@ -58,7 +62,7 @@ class Toolbar extends React.Component<{}, {}> {
     return (
       <AppBar color="accent" position="static">
         <MuiToolbar>
-          <Title type="title" color="inherit" onClick={goHome}>
+          <Title type="title" color="inherit" onClick={goAdmin}>
             TTV Flash Presentatie Beheer
           </Title>
           {this.props.user && (

@@ -3,6 +3,7 @@
 import React from 'react';
 import UniversalRouter from 'universal-router/main.js';
 import { setActivePresentation } from '../store';
+import Toolbar from '../components/App/Toolbar';
 
 // The list of all application routes where each route contains a URL path string (pattern),
 // the list of components to load asynchroneously (chunks), data requirements (GraphQL query),
@@ -12,10 +13,13 @@ const routes = [
   {
     path: '',
     components: () => [import(/* webpackChunkName: 'home' */ './Home')],
-    render: ({ user, components: [Home] }) => ({
-      title: 'TTV Flash Presentatie Beheer',
-      body: <Home user={user} />,
-    }),
+    render: ({ user, components: [Home] }) => {
+      setActivePresentation(undefined);
+      return {
+        title: 'TTV Flash - Presentatie Viewer',
+        body: <Home user={user} />,
+      };
+    },
   },
   {
     path: '/presentation/:presentationId',
@@ -27,8 +31,35 @@ const routes = [
       // console.log('presentationId: ', presentationId);
       setActivePresentation(presentationId);
       return {
-        title: 'TTV Flash Presentatie Beheer',
+        title: 'TTV Flash - Presentatie Viewer',
         body: <Home user={user} />,
+      };
+    },
+  },
+  {
+    path: '/admin',
+    components: () => [import(/* webpackChunkName: 'home' */ './Admin')],
+    render: ({ user, components: [Admin], location }) => {
+      setActivePresentation(undefined);
+      return {
+        title: 'TTV Flash - Presentatie Beheer',
+        toolbar: <Toolbar user={user} />,
+        body: <Admin user={user} />,
+      };
+    },
+  },
+  {
+    path: '/admin/presentation/:presentationId',
+    components: () => [import(/* webpackChunkName: 'home' */ './Admin')],
+    render: ({ user, components: [Admin], location }) => {
+      const presentationId = location.pathname.substring(
+        '/admin/presentation/'.length,
+      );
+      setActivePresentation(presentationId);
+      return {
+        title: 'TTV Flash - Presentatie Beheer',
+        toolbar: <Toolbar user={user} />,
+        body: <Admin user={user} />,
       };
     },
   },
@@ -36,7 +67,7 @@ const routes = [
     path: '/account',
     components: () => [import(/* webpackChunkName: 'Account' */ './Account')],
     render: ({ user, components: [Account] }) => ({
-      title: 'Mijn Account',
+      title: 'TTV Flash - Mijn Account',
       body: <Account user={user} />,
     }),
   },

@@ -22,16 +22,31 @@ const loggedInUser = observable.box();
 auth.onAuthStateChanged(user => loggedInUser.set(user));
 
 const presentations = new Collection('presentations');
-const activePresentation = new Document(undefined, { debug: true });
+const activePresentation = new Document(undefined, {
+  // debug: true,
+  debugName: 'ActivePresentation',
+});
+
+const defaultPresentationSetting = new Document(
+  'settings/defaultPresentation',
+  { debug: true, debugName: 'DefaultPresentationSetting' },
+);
+const defaultPresentationPath = () =>
+  `presentations/${defaultPresentationSetting.data.presentationId}`;
 
 function setActivePresentation(presentationId) {
-  if (activePresentation.id === presentationId) return;
-  activePresentation.path = 'presentations/' + presentationId;
+  if (!presentationId) {
+    activePresentation.path = defaultPresentationPath;
+  } else {
+    if (activePresentation.id === presentationId) return;
+    activePresentation.path = 'presentations/' + presentationId;
+  }
 }
 
 export {
   presentations,
   activePresentation,
+  defaultPresentationSetting,
   loggedInUser,
   setActivePresentation,
 };
