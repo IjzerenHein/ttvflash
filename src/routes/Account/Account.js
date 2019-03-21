@@ -1,11 +1,4 @@
-/**
- * React Starter Kit for Firebase and GraphQL
- * https://github.com/kriasoft/react-firebase-starter
- * Copyright (c) 2015-present Kriasoft | MIT License
- */
-
 /* @flow */
-
 import React from 'react';
 import styled from 'styled-components';
 import Card from 'material-ui/Card';
@@ -22,7 +15,11 @@ const Content = styled(Card)`
   margin: 2em 0;
 `;
 
-class Home extends React.Component<{}> {
+interface PropsType {
+  user: any;
+}
+
+class Account extends React.Component<PropsType> {
   render() {
     return (
       <Container>
@@ -39,4 +36,4 @@ class Home extends React.Component<{}> {
   }
 }
 
-export default Home;
+export default Account;

@@ -1,23 +1,16 @@
-/**
- * React Starter Kit for Firebase and GraphQL
- * https://github.com/kriasoft/react-firebase-starter
- * Copyright (c) 2015-present Kriasoft | MIT License
- */
-
 /* @flow */
-
 import '@firebase/auth';
 import firebase from '@firebase/app';
 
 const callbacks = new Set();
 
-export default {
+export const auth = {
   signInWithFacebook() {
     const provider = new firebase.auth.FacebookAuthProvider();
     return firebase.auth().signInWithPopup(provider);
   },
 
-  signInWithEmailAndPassword(username, password) {
+  signInWithEmailAndPassword(username: string, password: string) {
     return firebase.auth().signInWithEmailAndPassword(username, password);
   },
 

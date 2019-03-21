@@ -1,14 +1,6 @@
-/**
- * React Starter Kit for Firebase and GraphQL
- * https://github.com/kriasoft/react-firebase-starter
- * Copyright (c) 2015-present Kriasoft | MIT License
- */
-
 /* @flow */
-
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import history from '../../history';
 
 function isLeftClickEvent(event) {
@@ -20,7 +12,7 @@ function isModifiedEvent(event) {
 }
 
 type Props = {
-  onClick: ?(event: MouseEvent) => void,
+  onClick?: (event: MouseEvent) => void,
 };
 
 class Link extends React.Component<Props> {
@@ -45,6 +37,7 @@ class Link extends React.Component<Props> {
     }
 
     event.preventDefault();
+    // $FlowFixMe
     history.push(event.currentTarget.getAttribute('href'));
   }
 

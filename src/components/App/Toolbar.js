@@ -1,11 +1,4 @@
-/**
- * React Starter Kit for Firebase and GraphQL
- * https://github.com/kriasoft/react-firebase-starter
- * Copyright (c) 2015-present Kriasoft | MIT License
- */
-
 /* @flow */
-
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import MuiToolbar from 'material-ui/Toolbar';
@@ -13,7 +6,7 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import styled from 'styled-components';
 
-import auth from '../../auth';
+import { auth } from '../../store';
 import history from '../../history';
 import LoginDialog from './LoginDialog';
 
@@ -29,20 +22,31 @@ function goAdmin() {
   history.push('/admin');
 }
 
-class Toolbar extends React.Component<{}, {}> {
+interface PropsType {
+  user: any;
+}
+interface StateType {
+  loginOpen: boolean;
+  loginDialogOpen: boolean;
+}
+
+class Toolbar extends React.Component<PropsType, StateType> {
   state = {
     loginOpen: false,
+    loginDialogOpen: false,
   };
 
+  _unlisten: () => void;
+
   componentDidMount() {
-    this.unlisten = auth.onShowLoginDialog(this.showLoginDialog);
+    this._unlisten = auth.onShowLoginDialog(this.showLoginDialog);
   }
 
   componentWillUnmount() {
-    this.unlisten();
+    this._unlisten();
   }
 
-  showLoginDialog = event => {
+  showLoginDialog = () => {
     this.setState({ loginDialogOpen: true });
   };
 

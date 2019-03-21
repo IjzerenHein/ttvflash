@@ -1,12 +1,10 @@
 /* @flow */
-
 import React from 'react';
 import Button from 'material-ui/Button';
 import Dialog, { DialogTitle, DialogContent } from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import styled from 'styled-components';
-
-import auth from '../../auth';
+import { auth } from '../../store';
 
 const Title = styled(DialogTitle)`
   && {
@@ -24,7 +22,17 @@ const LoginButton = styled(Button)`
   margin-top: 20px;
 `;
 
-class LoginDialog extends React.Component {
+interface PropsType {
+  onClose: (event: any) => void;
+}
+interface StateType {
+  error: any;
+  loading: boolean;
+  email: string;
+  password: string;
+}
+
+class LoginDialog extends React.Component<PropsType, StateType> {
   state = {
     error: null,
     loading: false,
@@ -71,19 +79,19 @@ class LoginDialog extends React.Component {
     );
   }
 
-  onChangeEmail = event => {
+  onChangeEmail = (event: any) => {
     this.setState({
       email: event.target.value,
     });
   };
 
-  onChangePassword = event => {
+  onChangePassword = (event: any) => {
     this.setState({
       password: event.target.value,
     });
   };
 
-  onClickLogin = async event => {
+  onClickLogin = async (event: any) => {
     this.setState({
       loading: true,
       error: null,

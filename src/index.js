@@ -1,16 +1,9 @@
-/**
- * React Starter Kit for Firebase and GraphQL
- * https://github.com/kriasoft/react-firebase-starter
- * Copyright (c) 2015-present Kriasoft | MIT License
- */
-
 /* @flow */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './store';
 import App from './components/App';
-import auth from './auth';
+import { auth } from './store';
 import history from './history';
 import routes from './routes';
 import registerServiceWorker from './registerServiceWorker';
@@ -20,6 +13,7 @@ const render = props =>
     try {
       ReactDOM.render(
         <App {...props} />,
+        // $FlowFixMe
         document.getElementById('root'),
         resolve(props),
       );

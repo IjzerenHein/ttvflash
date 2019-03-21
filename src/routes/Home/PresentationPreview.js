@@ -1,3 +1,4 @@
+/* @flow */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -23,10 +24,20 @@ const IFrame = styled.iframe`
   border: none;
 `;
 
-class PresentationPreview extends Component {
+interface PropsType {
+  presentation: any;
+}
+
+interface StateType {
+  refreshTime: number;
+}
+
+class PresentationPreview extends Component<PropsType, StateType> {
   static propTypes = {
     presentation: PropTypes.any.isRequired,
   };
+
+  _timer: any;
 
   state = {
     refreshTime: 0,

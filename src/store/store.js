@@ -1,8 +1,10 @@
+/* @flow */
 import firebase from '@firebase/app';
 import 'firebase/firestore';
 import { initFirestorter, Collection, Document } from 'firestorter';
 import { observable } from 'mobx';
-import auth from './auth';
+import { auth } from './auth';
+import { TTAppStore } from './ttapp';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyA1IoyYNh9knR_enXTikdaNPAc1JYoUDSg',
@@ -18,23 +20,24 @@ initFirestorter({
   firebase: firebase,
 });
 
-const loggedInUser = observable.box();
+// $FlowFixMe
+export const loggedInUser = observable.box(undefined);
 auth.onAuthStateChanged(user => loggedInUser.set(user));
 
-const presentations = new Collection('presentations');
-const activePresentation = new Document(undefined, {
+export const presentations = new Collection('presentations');
+export const activePresentation = new Document(undefined, {
   // debug: true,
   debugName: 'ActivePresentation',
 });
 
-const defaultPresentationSetting = new Document(
+export const defaultPresentationSetting = new Document(
   'settings/defaultPresentation',
   { debug: true, debugName: 'DefaultPresentationSetting' },
 );
 const defaultPresentationPath = () =>
   `presentations/${defaultPresentationSetting.data.presentationId}`;
 
-function setActivePresentation(presentationId) {
+export function setActivePresentation(presentationId?: string) {
   if (!presentationId) {
     activePresentation.path = defaultPresentationPath;
   } else {
@@ -43,10 +46,6 @@ function setActivePresentation(presentationId) {
   }
 }
 
-export {
-  presentations,
-  activePresentation,
-  defaultPresentationSetting,
-  loggedInUser,
-  setActivePresentation,
-};
+export const ttapp = new TTAppStore({
+  isEnabled: () => true,
+});

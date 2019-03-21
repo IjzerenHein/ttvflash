@@ -11,4 +11,6 @@
 
 [options]
 
+suppress_type=$FlowFixMe
+
 [strict]

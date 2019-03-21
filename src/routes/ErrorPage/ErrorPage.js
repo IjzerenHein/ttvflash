@@ -1,11 +1,4 @@
-/**
- * React Starter Kit for Firebase and GraphQL
- * https://github.com/kriasoft/react-firebase-starter
- * Copyright (c) 2015-present Kriasoft | MIT License
- */
-
 /* @flow */
-
 import React from 'react';
 import styled from 'styled-components';
 
@@ -79,9 +72,10 @@ type Props = {
   error: ?Error,
 };
 
-class ErrorPage extends React.Component<any, Props, any> {
+class ErrorPage extends React.Component<Props, any> {
   componentDidMount() {
     document.title =
+      // $FlowFixMe
       this.props.error && this.props.error.status === 404
         ? 'Page Not Found'
         : 'Error';
@@ -98,6 +92,7 @@ class ErrorPage extends React.Component<any, Props, any> {
     }
 
     const [code, title] =
+      // $FlowFixMe
       this.props.error && this.props.error.status === 404
         ? ['404', 'Page not found']
         : ['Error', 'Oops, something went wrong'];

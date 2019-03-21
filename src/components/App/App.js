@@ -1,5 +1,4 @@
 /* @flow */
-
 import React from 'react';
 import styled from 'styled-components';
 import { MuiThemeProvider } from 'material-ui/styles';
@@ -12,7 +11,11 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-class App extends React.Component<{}> {
+interface PropsType {
+  route: any;
+}
+
+class App extends React.Component<PropsType> {
   componentDidMount() {
     window.document.title = this.props.route.title;
   }
