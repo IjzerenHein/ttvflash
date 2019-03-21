@@ -9,7 +9,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     // backgroundColor: 'green',
-    width: 320,
+    width: 481,
   },
   header: {
     backgroundColor: '#f8f8f8',
@@ -17,7 +17,9 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     padding: '16px',
+    height: '120px',
   },
   headerLeft: {
     display: 'flex',
@@ -41,6 +43,7 @@ const styles = {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    padding: '10px 0',
   },
   noMatches: {
     padding: '0 16px',
@@ -65,21 +68,21 @@ const styles = {
   },
   body: {
     fontFamily: "'PT Sans', sans-serif",
-    fontSize: 14,
+    fontSize: 20,
   },
   caption: {
     fontFamily: "'PT Sans', sans-serif",
-    fontSize: 12,
+    fontSize: 18,
     color: 'gray',
   },
   heading1: {
     fontFamily: "'PT Sans', sans-serif",
-    fontSize: 40,
+    fontSize: 50,
     fontWeight: 'bold',
   },
   heading2: {
     fontFamily: "'PT Sans', sans-serif",
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
   },
 };
