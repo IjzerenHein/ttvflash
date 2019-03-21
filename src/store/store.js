@@ -47,5 +47,6 @@ export function setActivePresentation(presentationId?: string) {
 }
 
 export const ttapp = new TTAppStore({
-  isEnabled: () => true,
+  //isEnabled: () => true,
+  isEnabled: () => false,
 });
