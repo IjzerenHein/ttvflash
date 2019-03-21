@@ -1,41 +1,9 @@
 /* @flow */
-import { reaction, observable } from 'mobx';
-import type { IObservableValue } from 'mobx';
 
-const CLUB_ID = '1057';
-
-export class TTAppStore {
+export class TTAppAPI {
   _token = undefined;
   _uid = undefined;
   _tokenCorrection = undefined;
-  _isEnabled: IObservableValue<boolean> = observable.box(false);
-  _teams: IObservableValue<any> = observable.box(undefined);
-
-  constructor(config: { isEnabled: () => boolean }) {
-    reaction(
-      config.isEnabled,
-      isEnabled => {
-        this._isEnabled.set(isEnabled);
-        if (isEnabled) {
-          this.init();
-        } else {
-          this.cleanup();
-        }
-      },
-      { fireImmediately: true },
-    );
-  }
-
-  get isEnabled(): boolean {
-    return this._isEnabled.get();
-  }
-
-  async init() {
-    await this.login();
-    await this.getTeams(CLUB_ID);
-  }
-
-  async cleanup() {}
 
   async request(fields: any) {
     fields.c = 'site-300';
@@ -91,12 +59,16 @@ export class TTAppStore {
     this._tokenCorrection = 1e3 * this._token - new Date().getTime();
   }
 
-  getTeams(clubId: string): Promise<any> {
+  getTeams(clubId: string, semester: number = 0): Promise<any> {
+    if (!semester) {
+      const date = new Date();
+      semester = date.getFullYear() * 10 + (date.getMonth() > 6 ? 2 : 1);
+    }
     return this.request({
       task: 'club',
-      clubid: CLUB_ID,
+      clubid: clubId,
       tab: 't',
-      semester: 20191,
+      semester,
     });
   }
 
@@ -105,6 +77,13 @@ export class TTAppStore {
       task: 'poule',
       p: teamId,
       tab: 'w',
+    });
+  }
+
+  getMatch(matchId: string): Promise<any> {
+    return this.request({
+      task: 'match',
+      matchid: matchId,
     });
   }
 }
