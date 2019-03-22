@@ -4,7 +4,6 @@ import 'firebase/firestore';
 import { initFirestorter, Collection, Document } from 'firestorter';
 import { observable } from 'mobx';
 import { auth } from './auth';
-import { TTAppStore } from './ttapp';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyA1IoyYNh9knR_enXTikdaNPAc1JYoUDSg',
@@ -45,8 +44,3 @@ export function setActivePresentation(presentationId?: string) {
     activePresentation.path = 'presentations/' + presentationId;
   }
 }
-
-export const ttapp = new TTAppStore({
-  //isEnabled: () => true,
-  isEnabled: () => false,
-});

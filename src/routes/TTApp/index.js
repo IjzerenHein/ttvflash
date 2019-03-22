@@ -1,2 +1,2 @@
 /* @flow */
-export * from './TTAppLive';
+export { default } from './TTAppLive';

@@ -10,6 +10,7 @@ export class TTAppTeam {
   _team: any;
   _poule: IObservableValue<any>;
   _lastUpdated: IObservableValue<Date>;
+  _interval: any;
 
   constructor(config: { api: TTAppAPI, group: any, team: any }) {
     this._api = config.api;
@@ -17,14 +18,13 @@ export class TTAppTeam {
     this._team = config.team;
     this._poule = observable.box({});
     this._lastUpdated = observable.box(new Date());
-    this._init();
   }
 
-  async _init() {
+  async init() {
     const poule = await this._api.getPoule(this.pouleId);
     runInAction(() => this._poule.set(poule));
 
-    setInterval(async () => {
+    this._interval = setInterval(async () => {
       const { liveMatch } = this;
       if (liveMatch) {
         const poule = await this._api.getPoule(this.pouleId);
@@ -34,6 +34,11 @@ export class TTAppTeam {
         });
       }
     }, 10000);
+  }
+
+  cleanup() {
+    clearInterval(this._interval);
+    this._interval = undefined;
   }
 
   get players(): Array<any> {

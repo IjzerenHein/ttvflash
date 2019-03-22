@@ -49,6 +49,29 @@ const routes = [
     },
   },
   {
+    path: '/ttapp',
+    components: () => [import(/* webpackChunkName: 'home' */ './TTApp')],
+    render: ({ user, components: [TTApp], location }) => {
+      setActivePresentation(undefined);
+      return {
+        title: 'TTV Flash - TTApp Viewer',
+        body: <TTApp user={user} />,
+      };
+    },
+  },
+  {
+    path: '/ttapp/:clubId',
+    components: () => [import(/* webpackChunkName: 'home' */ './TTApp')],
+    render: ({ user, components: [TTApp], location }) => {
+      const clubId = location.pathname.substring('/ttapp/'.length);
+      setActivePresentation(undefined);
+      return {
+        title: 'TTApp Viewer',
+        body: <TTApp user={user} clubId={clubId} />,
+      };
+    },
+  },
+  {
     path: '/admin/presentation/:presentationId',
     components: () => [import(/* webpackChunkName: 'home' */ './Admin')],
     render: ({ user, components: [Admin], location }) => {

@@ -1,12 +1,12 @@
 /* @flow */
-import { reaction, observable, runInAction } from 'mobx';
+import { observable, runInAction } from 'mobx';
 import type { IObservableValue, IObservableArray } from 'mobx';
 import { TTAppAPI } from './TTAppAPI';
 import { TTAppTeam } from './TTAppTeam';
 import moment from 'moment';
 
 // const CLUB_ID = '1057';
-const CLUB_ID = '1088';
+const CLUB_ID = '1088'; // Flash
 
 export class TTAppStore {
   _api = new TTAppAPI();
@@ -14,22 +14,7 @@ export class TTAppStore {
   _club: IObservableValue<any> = observable.box({});
   _teams: IObservableArray<TTAppTeam> = observable.array([]);
   _groups: IObservableValue<any> = observable.box(undefined);
-  _lastUpdated: IObservableValue<Date> = observable.box(undefined);
-
-  constructor(config: { isEnabled: () => boolean }) {
-    reaction(
-      config.isEnabled,
-      isEnabled => {
-        this._isEnabled.set(isEnabled);
-        if (isEnabled) {
-          this.init();
-        } else {
-          this.cleanup();
-        }
-      },
-      { fireImmediately: true },
-    );
-  }
+  _lastUpdated: IObservableValue<?Date> = observable.box(undefined);
 
   get isEnabled(): boolean {
     return this._isEnabled.get();
@@ -64,14 +49,15 @@ export class TTAppStore {
     if (!lastUpdated) return undefined;
     this.teams.forEach(team => {
       const lu = team.lastUpdated;
+      // $FlowFixMe
       if (lu.getTime() > lastUpdated.getTime()) lastUpdated = lu;
     });
     return lastUpdated;
   }
 
-  async init() {
+  async init(clubId: string = CLUB_ID) {
     await this._api.login();
-    const { club, groups } = await this._api.getTeams(CLUB_ID);
+    const { club, groups } = await this._api.getTeams(clubId);
 
     const teams = [];
     for (let i = 0; i < groups.length; i++) {
@@ -85,6 +71,7 @@ export class TTAppStore {
           team: teamInfo,
         });
         teams.push(team);
+        team.init();
       }
     }
     runInAction(() => {
@@ -94,5 +81,12 @@ export class TTAppStore {
     });
   }
 
-  async cleanup() {}
+  async cleanup() {
+    this.teams.forEach(team => team.cleanup());
+    runInAction(() => {
+      this._lastUpdated.set(undefined);
+      this._club.set({});
+      this._teams.replace([]);
+    });
+  }
 }

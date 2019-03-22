@@ -1,9 +1,9 @@
 /* @flow */
 import React from 'react';
 import styled from 'styled-components';
-import { observer, activePresentation, ttapp } from '../../store';
+import { observer, activePresentation } from '../../store';
 import PresentationPreview from './PresentationPreview';
-import { TTAppLive } from '../TTApp';
+import TTApp from '../TTApp';
 
 const Container = styled.div`
   display: flex;
@@ -16,8 +16,8 @@ class Home extends React.Component<{}> {
     return (
       <Container>
         <PresentationPreview presentation={activePresentation} />
-        {ttapp.isEnabled ? (
-          <TTAppLive presentation={activePresentation} />
+        {activePresentation.data.ttapp ? (
+          <TTApp delay={activePresentation.data.delay} />
         ) : (
           undefined
         )}

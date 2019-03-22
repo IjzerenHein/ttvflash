@@ -8,6 +8,7 @@ import {
 import { observer } from 'mobx-react';
 import Card from 'material-ui/Card';
 import Button from 'material-ui/Button';
+import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -26,6 +27,7 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import PresentationPreview from '../Home/PresentationPreview';
+import TTApp from '../TTApp';
 
 const Container = styled(Card)`
   flex: 1;
@@ -61,6 +63,12 @@ const StandardButton = styled(Button)`
   margin: 0 10px 0 20px;
 `;
 
+const PresentationContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+`;
+
 class PresentationDetails extends Component {
   state = {
     deleteDialogOpen: false,
@@ -71,7 +79,7 @@ class PresentationDetails extends Component {
     const { deleteDialogOpen } = this.state;
     const disabled = loggedInUser.get() ? false : true;
     if (!presentation || !presentation.ref) return <Container />;
-    const { name, url, delay } = presentation.data;
+    const { name, url, delay, ttapp } = presentation.data;
     const isDefault =
       presentation.id === defaultPresentationSetting.data.presentationId;
     return (
@@ -134,6 +142,13 @@ class PresentationDetails extends Component {
             value={url || ''}
             onChange={event => this.onChangeValue('url', event)}
           />
+          <Checkbox
+            id="ttapp"
+            label="Show TTApp"
+            disabled={disabled}
+            checked={ttapp || false}
+            onChange={event => this.onChangeValue('ttapp', event)}
+          />
           {/*<IconButton
             aria-label="Open"
             color="primary"
@@ -142,7 +157,10 @@ class PresentationDetails extends Component {
             <OpenIcon />
           </IconButton>*/}
         </Row>
-        <PresentationPreview presentation={presentation} />
+        <PresentationContainer>
+          <PresentationPreview presentation={presentation} />
+          {ttapp ? <TTApp delay={delay} /> : undefined}
+        </PresentationContainer>
         <Dialog
           open={deleteDialogOpen}
           onClose={this.handleClose}
@@ -173,8 +191,9 @@ class PresentationDetails extends Component {
   }
 
   async onChangeValue(field, event) {
-    const value = event.target.value;
-    if (!value) return;
+    const value = field === 'ttapp' ? event.target.checked : event.target.value;
+    console.log('onchangeValue: ', field, value, event);
+    if (!value && value !== false) return;
 
     const fields = {};
     fields[field] = value;
