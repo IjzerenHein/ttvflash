@@ -29,14 +29,14 @@ export class TTAppStore {
   }
 
   getMatchForWeek(weekOffset: number = 0): Array<any> | void {
-    const date = moment().add(weekOffset, 'week');
+    const date = moment(this._api.currentDate).add(weekOffset, 'week');
     const result = this.teams
       .map(team => {
         const match = team.getMatchForWeek(date);
         return {
           team,
           match,
-          isLive: match ? TTAppTeam.isMatchLive(match) : undefined,
+          isLive: match ? team.isMatchLive(match) : undefined,
         };
       })
       .filter(({ match }) => match)
@@ -53,6 +53,10 @@ export class TTAppStore {
       if (lu.getTime() > lastUpdated.getTime()) lastUpdated = lu;
     });
     return lastUpdated;
+  }
+
+  get currentDate(): ?Date {
+    return this._api.currentDate;
   }
 
   async init(clubId: string = CLUB_ID) {

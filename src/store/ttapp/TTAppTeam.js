@@ -33,7 +33,7 @@ export class TTAppTeam {
           this._lastUpdated.set(new Date());
         });
       }
-    }, 10000);
+    }, 60000);
   }
 
   cleanup() {
@@ -57,7 +57,7 @@ export class TTAppTeam {
 
   getMatchForWeek(mom?: any): any {
     const { matches } = this;
-    mom = mom || moment();
+    mom = mom || moment(this._api.currentDate);
     const startOfWeek = mom.startOf('week').format('YYYY-MM-DD');
     const endOfWeek = mom.endOf('week').format('YYYY-MM-DD');
     return matches.find(
@@ -65,29 +65,22 @@ export class TTAppTeam {
     );
   }
 
-  static startOfDay(date?: Date): any {
-    const mom = moment(date);
-    const hours = mom.get('hours');
-    if (hours >= 0 && hours < 6) {
-      return mom.add(-1, 'day').startOf('day');
-    } else {
-      return mom.startOf('day');
-    }
-  }
-
-  static isMatchLive(match: any): boolean {
-    const curtime = moment().format('YYYY-MM-DD HH:mm:ss');
-    const endtime = TTAppTeam.startOfDay()
+  isMatchLive(match: any): boolean {
+    const curtime = moment(this._api.currentDate).format('YYYY-MM-DD HH:mm:ss');
+    const endtime = moment(match.playdate)
+      .startOf('day')
       .add(1, 'day')
       .add(3, 'hours')
       .format('YYYY-MM-DD HH:mm:ss');
     return (
-      curtime >= match.playtime && match.playtime < endtime && match.status <= 0
+      curtime >= match.playtime &&
+      curtime < endtime &&
+      match.score1 + match.score2 !== 10
     );
   }
 
   get liveMatch(): any {
-    return this.matches.find(TTAppTeam.isMatchLive);
+    return this.matches.find(match => this.isMatchLive(match));
   }
 
   get teamId(): number {

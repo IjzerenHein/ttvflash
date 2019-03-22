@@ -95,4 +95,8 @@ export class TTAppAPI {
       matchid: matchId,
     });
   }
+
+  get currentDate(): ?Date {
+    // return new Date('2019-03-23T03:00:00');
+  }
 }
