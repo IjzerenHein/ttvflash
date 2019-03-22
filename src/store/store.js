@@ -10,7 +10,7 @@ firebase.initializeApp({
   authDomain: 'ttvflash-2b993.firebaseapp.com',
   databaseURL: 'https://ttvflash-2b993.firebaseio.com',
   projectId: 'ttvflash-2b993',
-  storageBucket: '',
+  storageBucket: 'ttvflash-2b993.appspot.com',
   messagingSenderId: '797892172085',
 });
 
