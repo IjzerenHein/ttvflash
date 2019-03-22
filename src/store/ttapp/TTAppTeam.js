@@ -25,8 +25,8 @@ export class TTAppTeam {
     runInAction(() => this._poule.set(poule));
 
     setInterval(async () => {
-      const { todaysMatch } = this;
-      if (todaysMatch && todaysMatch.status !== 0) {
+      const { liveMatch } = this;
+      if (liveMatch) {
         const poule = await this._api.getPoule(this.pouleId);
         runInAction(() => {
           this._poule.set(poule);
@@ -50,12 +50,39 @@ export class TTAppTeam {
     return this._lastUpdated.get();
   }
 
-  get todaysMatch(): any {
+  getMatchForWeek(mom?: any): any {
     const { matches } = this;
-    const playdate = moment().format('YYYY-MM-DD');
-    return matches.find(match => match.playdate === playdate);
-    // return matches[0];
-    // return null;
+    mom = mom || moment();
+    const startOfWeek = mom.startOf('week').format('YYYY-MM-DD');
+    const endOfWeek = mom.endOf('week').format('YYYY-MM-DD');
+    return matches.find(
+      match => match.playdate >= startOfWeek && match.playdate < endOfWeek,
+    );
+  }
+
+  static startOfDay(date?: Date): any {
+    const mom = moment(date);
+    const hours = mom.get('hours');
+    if (hours >= 0 && hours < 6) {
+      return mom.add(-1, 'day').startOf('day');
+    } else {
+      return mom.startOf('day');
+    }
+  }
+
+  static isMatchLive(match: any): boolean {
+    const curtime = moment().format('YYYY-MM-DD HH:mm:ss');
+    const endtime = TTAppTeam.startOfDay()
+      .add(1, 'day')
+      .add(3, 'hours')
+      .format('YYYY-MM-DD HH:mm:ss');
+    return (
+      curtime >= match.playtime && match.playtime < endtime && match.status <= 0
+    );
+  }
+
+  get liveMatch(): any {
+    return this.matches.find(TTAppTeam.isMatchLive);
   }
 
   get teamId(): number {

@@ -16,7 +16,11 @@ class Home extends React.Component<{}> {
     return (
       <Container>
         <PresentationPreview presentation={activePresentation} />
-        {ttapp.isEnabled ? <TTAppLive /> : undefined}
+        {ttapp.isEnabled ? (
+          <TTAppLive presentation={activePresentation} />
+        ) : (
+          undefined
+        )}
       </Container>
     );
   }

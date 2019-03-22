@@ -6,6 +6,14 @@ export class TTAppAPI {
   _tokenCorrection = undefined;
 
   async request(fields: any) {
+    const cacheKey = JSON.stringify(fields);
+    const cache = localStorage.getItem(cacheKey);
+    if (cache) {
+      const json = JSON.parse(cache);
+      console.log(json);
+      return json;
+    }
+
     fields.c = 'site-300';
     if (this._uid) fields.uid = this._uid;
     if (this._token) {
@@ -42,6 +50,7 @@ export class TTAppAPI {
         throw new Error(`Invalid status: ${response.status}`);
       console.log(`FETCHing DONE (status: ${response.status})`);
       const json = await response.json();
+      localStorage.setItem(cacheKey, JSON.stringify(json));
       console.log(json);
       return json;
     } catch (err) {

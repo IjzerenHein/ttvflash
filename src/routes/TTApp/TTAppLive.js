@@ -2,24 +2,33 @@
 import React, { Component } from 'react';
 import { observer, ttapp } from '../../store';
 import Clock from 'react-live-clock';
-import moment from 'moment';
+import * as moment from 'moment';
+import 'moment/locale/nl';
+
+const Colors = {
+  red: '#a90201',
+  lightGray: '#f8f8f8',
+  gray: '#e7e7e7',
+};
 
 const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
     // backgroundColor: 'green',
-    width: 481,
+    width: 335,
+    borderLeft: '1px solid ' + Colors.gray,
   },
   header: {
-    backgroundColor: '#f8f8f8',
-    borderBottom: '1px solid #e7e7e7',
+    backgroundColor: Colors.lightGray,
+    borderBottom: '1px solid ' + Colors.gray,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '16px',
-    height: '120px',
+    padding: '0 16px',
+    height: '109px',
+    // height: '120px',
   },
   headerLeft: {
     display: 'flex',
@@ -31,7 +40,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '16px',
+    padding: '2px 2px 12px 16px',
   },
   footerLeft: {
     display: 'flex',
@@ -43,7 +52,7 @@ const styles = {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    padding: '10px 0',
+    overflow: 'hidden',
   },
   noMatches: {
     padding: '0 16px',
@@ -58,7 +67,23 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    height: '40px',
+    borderBottom: '1px solid ' + Colors.gray,
+    height: '52px',
+  },
+  matchFooter: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  live: {
+    backgroundColor: Colors.red,
+    fontFamily: "'PT Sans', sans-serif",
+    fontSize: 13,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    color: 'white',
+    padding: '1px 4px',
+    marginRight: '8px',
   },
   left: {
     display: 'flex',
@@ -66,80 +91,208 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'center',
   },
+  section: {
+    padding: '8px 16px 4px 16px',
+  },
+  ownteam: {
+    color: Colors.red,
+  },
   body: {
     fontFamily: "'PT Sans', sans-serif",
-    fontSize: 20,
+    fontSize: 17,
+    // lineHeight: '19px',
+    fontWeight: 'bold',
+  },
+  body2: {
+    fontFamily: "'PT Sans', sans-serif",
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   caption: {
     fontFamily: "'PT Sans', sans-serif",
-    fontSize: 18,
+    fontSize: 15,
     color: 'gray',
   },
   heading1: {
     fontFamily: "'PT Sans', sans-serif",
-    fontSize: 50,
+    fontSize: 44,
     fontWeight: 'bold',
   },
   heading2: {
     fontFamily: "'PT Sans', sans-serif",
-    fontSize: 30,
+    fontSize: 32,
+    fontWeight: 'bold',
+  },
+  heading3: {
+    fontFamily: "'PT Sans', sans-serif",
+    fontSize: 24,
     fontWeight: 'bold',
   },
 };
 
-interface PropsType {}
+interface PropsType {
+  presentation: any;
+}
+
+interface StateType {
+  pageIndex: number;
+}
+
+const PageIndex = {
+  CURRENT: 0,
+  PREVIOUS: 1,
+  STANDINGS: 2,
+};
 
 export const TTAppLive = observer(
-  class TTAppLive extends Component<PropsType> {
+  class TTAppLive extends Component<PropsType, StateType> {
+    _timer: any;
+
+    state = {
+      pageIndex: 0,
+    };
+
+    componentDidMount() {
+      this._timer = setInterval(() => {
+        this.setState({
+          pageIndex: (this.state.pageIndex + 1) % 2,
+        });
+      }, this.props.presentation.data.refreshTime || 10000);
+    }
+
+    componentWillUnmount() {
+      clearInterval(this._timer);
+      this._timer = undefined;
+    }
+
+    renderTeamName(teamid, teamname, team) {
+      const isOwnTeam = teamid === team.teamId;
+      const name =
+        isOwnTeam && team.groupName !== 'Senioren'
+          ? `${team.groupName} ${teamname}`
+          : teamname;
+      return <span style={isOwnTeam ? styles.ownteam : undefined}>{name}</span>;
+    }
+
+    renderMatch(team, match, isLive) {
+      return (
+        <div style={styles.matchContainer} key={team.teamId}>
+          <div style={styles.left}>
+            <div style={styles.body}>
+              {this.renderTeamName(match.team1id, match.team1name, team)}
+              {' - '}
+              {this.renderTeamName(match.team2id, match.team2name, team)}
+            </div>
+            {/*<div style={styles.caption}>{`${team.pouleName}`}</div>*/}
+            <div style={styles.matchFooter}>
+              {isLive ? <div style={styles.live}>Live</div> : undefined}
+              <div style={styles.caption}>{`${moment(match.playtime).format(
+                'dddd D MMMM, HH:mm',
+              )}`}</div>
+            </div>
+          </div>
+          <div style={styles.heading3}>{`${match.result.replace(
+            '(ovb)',
+            '',
+          )}`}</div>
+        </div>
+      );
+    }
+
+    renderMatches(matches) {
+      if (!matches) {
+        return (
+          <div style={styles.noMatches}>
+            <div style={styles.body}>{`Er zijn geen`}</div>
+            <div style={styles.body}>{`wedstrijden gevonden`}</div>
+          </div>
+        );
+      }
+      return (
+        <div style={styles.matches}>
+          {matches.map(({ team, match, isLive }) =>
+            this.renderMatch(team, match, isLive),
+          )}
+        </div>
+      );
+    }
+
+    renderStandings() {
+      // TODO
+      return undefined;
+    }
+
+    renderHeader(matches) {
+      let title = '';
+      /*const subTitle = matches
+        ? `${moment(matches[0].match.playdate)
+            .startOf('week')
+            .format('dddd D MMMM')} - ${moment(matches[0].match.playdate)
+            .endOf('week')
+            .format('dddd D MMMM')}`
+        : moment().format('dddd D MMMM');*/
+      const subTitle = 'Powered by TTApp';
+      switch (this.state.pageIndex) {
+        case PageIndex.CURRENT:
+          title = 'Deze week';
+          break;
+        case PageIndex.PREVIOUS:
+          title = 'Vorige week';
+          break;
+        case PageIndex.STANDINGS:
+          title = 'Standen';
+          break;
+        default:
+          break;
+      }
+
+      return (
+        <div style={styles.header}>
+          <div style={styles.headerLeft}>
+            <div style={styles.heading2}>{title}</div>
+            <div style={styles.caption}>{subTitle}</div>
+          </div>
+          <Clock ticking={true} style={styles.heading1} />
+        </div>
+      );
+    }
+
+    renderFooter() {
+      const { lastUpdated } = ttapp;
+      return (
+        <div style={styles.footer}>
+          <div style={styles.footerLeft}>
+            <div style={styles.body2}>{`Powered by TTApp`}</div>
+            <div style={styles.caption}>{`Laatst bijgewerkt ${
+              lastUpdated ? moment(lastUpdated).format('HH:MM') : ''
+            }`}</div>
+          </div>
+          <img
+            src={require('../../assets/ttapp.png')}
+            height={44}
+            alt="ttapp-logo"
+          />
+        </div>
+      );
+    }
+
     render() {
-      const { todaysTeams, lastUpdated } = ttapp;
+      const { pageIndex } = this.state;
+      const matches =
+        pageIndex === PageIndex.PREVIOUS
+          ? ttapp.getMatchForWeek(-1) ||
+            ttapp.getMatchForWeek(-2) ||
+            ttapp.getMatchForWeek(-3)
+          : ttapp.getMatchForWeek(0) ||
+            ttapp.getMatchForWeek(1) ||
+            ttapp.getMatchForWeek(2);
       return (
         <div style={styles.container}>
-          <div style={styles.header}>
-            <div style={styles.headerLeft}>
-              <div style={styles.heading2}>{`Wedstrijden vandaag`}</div>
-              <div style={styles.caption}>{moment().format('dddd D MMMM')}</div>
-            </div>
-            <Clock ticking={true} style={styles.heading1} />
-          </div>
-          {todaysTeams.length ? (
-            <div style={styles.matches}>
-              {todaysTeams.map(team => {
-                const match = team.todaysMatch;
-                return (
-                  <div style={styles.matchContainer} key={team.teamId}>
-                    <div style={styles.left}>
-                      <div style={styles.body}>
-                        {`${match.team1name} - ${match.team2name}`}
-                      </div>
-                      <div style={styles.caption}>{`${team.pouleName}`}</div>
-                    </div>
-                    <div style={styles.heading2}>{`${match.result}`}</div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div style={styles.noMatches}>
-              <div style={styles.body}>{`Er worden vandaag geen`}</div>
-              <div style={styles.body}>{`NTTB wedstrijden gespeeld`}</div>
-            </div>
-          )}
-          <div style={styles.footer}>
-            <div style={styles.footerLeft}>
-              <div
-                style={styles.body}
-              >{`Powered by TTApp, by @ijzerenhein`}</div>
-              <div style={styles.caption}>{`Laatst bijgewerkt ${
-                lastUpdated ? moment(lastUpdated).format('HH:MM') : ''
-              }`}</div>
-            </div>
-            <img
-              src={require('../../assets/ttapp.png')}
-              height={64}
-              alt="ttapp-logo"
-            />
-          </div>
+          {this.renderHeader(matches)}
+          {pageIndex === PageIndex.STANDINGS
+            ? this.renderStandings()
+            : this.renderMatches(matches)}
+          {/*this.renderFooter()*/}
         </div>
       );
     }

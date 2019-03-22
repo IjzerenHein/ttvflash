@@ -3,8 +3,10 @@ import { reaction, observable, runInAction } from 'mobx';
 import type { IObservableValue, IObservableArray } from 'mobx';
 import { TTAppAPI } from './TTAppAPI';
 import { TTAppTeam } from './TTAppTeam';
+import moment from 'moment';
 
-const CLUB_ID = '1057';
+// const CLUB_ID = '1057';
+const CLUB_ID = '1088';
 
 export class TTAppStore {
   _api = new TTAppAPI();
@@ -41,15 +43,26 @@ export class TTAppStore {
     return this._teams;
   }
 
-  get todaysTeams(): Array<TTAppTeam> {
-    return this.teams.filter(team => team.todaysMatch);
+  getMatchForWeek(weekOffset: number = 0): Array<any> | void {
+    const date = moment().add(weekOffset, 'week');
+    const result = this.teams
+      .map(team => {
+        const match = team.getMatchForWeek(date);
+        return {
+          team,
+          match,
+          isLive: match ? TTAppTeam.isMatchLive(match) : undefined,
+        };
+      })
+      .filter(({ match }) => match)
+      .sort((a, b) => a.match.playtime.localeCompare(b.match.playtime));
+    return result.length ? result : undefined;
   }
 
   get lastUpdated(): ?Date {
     let lastUpdated = this._lastUpdated.get();
-    const { todaysTeams } = this;
     if (!lastUpdated) return undefined;
-    todaysTeams.forEach(team => {
+    this.teams.forEach(team => {
       const lu = team.lastUpdated;
       if (lu.getTime() > lastUpdated.getTime()) lastUpdated = lu;
     });
