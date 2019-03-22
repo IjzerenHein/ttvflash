@@ -11,7 +11,6 @@ jobs:
       - checkout
       - restore_cache:
           key: yarn-v1-{{ checksum "yarn.lock" }}
-          key: yarn-v1-
       - run:
           name: Install NPM modules
           command: yarn
@@ -34,4 +33,3 @@ jobs:
               yarn global add firebase-tools
               $(yarn global bin)/firebase deploy --token=$FIREBASE_TOKEN
             fi
-
