@@ -1,10 +1,9 @@
 {
-  "Account.js": "static/js/Account.fe3d6b3e.chunk.js",
-  "Account.js.map": "static/js/Account.fe3d6b3e.chunk.js.map",
-  "home.js": "static/js/home.056e9084.chunk.js",
-  "home.js.map": "static/js/home.056e9084.chunk.js.map",
-  "main.js": "static/js/main.9d620d96.js",
-  "main.js.map": "static/js/main.9d620d96.js.map",
-  "privacy.js": "static/js/privacy.52e7ba7a.chunk.js",
-  "privacy.js.map": "static/js/privacy.52e7ba7a.chunk.js.map"
+  "Account.js": "static/js/Account.30de2d76.chunk.js",
+  "Account.js.map": "static/js/Account.30de2d76.chunk.js.map",
+  "home.js": "static/js/home.0c287958.chunk.js",
+  "home.js.map": "static/js/home.0c287958.chunk.js.map",
+  "main.js": "static/js/main.6ac8bdab.js",
+  "main.js.map": "static/js/main.6ac8bdab.js.map",
+  "static/media/ttapp.png": "static/media/ttapp.918d637a.png"
 }
