@@ -11,18 +11,27 @@ const Container = styled.div`
   flex-direction: row;
 `;
 
+const styles = {
+  fourThree: {
+    width: `133.33vh`,
+  },
+  fullWidth: {
+    flex: 1,
+  },
+};
+
 interface PropsType {}
 
 class Home extends React.Component<PropsType> {
   render() {
+    const { ttapp } = activePresentation.data;
     return (
       <Container>
-        <PresentationPreview presentation={activePresentation} />
-        {activePresentation.data.ttapp ? (
-          <TTApp delay={activePresentation.data.delay} />
-        ) : (
-          undefined
-        )}
+        <PresentationPreview
+          presentation={activePresentation}
+          style={ttapp ? styles.fourThree : styles.fullWidth}
+        />
+        {ttapp ? <TTApp delay={activePresentation.data.delay} /> : undefined}
       </Container>
     );
   }

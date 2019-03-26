@@ -6,7 +6,6 @@ import { observer } from 'mobx-react';
 import parseUrl from 'parse-url';
 
 const Container = styled.div`
-  flex: 1;
   position: relative;
   overflow: hidden;
 `;
@@ -26,6 +25,7 @@ const IFrame = styled.iframe`
 
 interface PropsType {
   presentation: any;
+  style: any;
 }
 
 interface StateType {
@@ -87,10 +87,11 @@ class PresentationPreview extends Component<PropsType, StateType> {
   }
 
   render() {
+    const { style } = this.props;
     const url = this.getUrl();
 
     return (
-      <Container>
+      <Container style={style}>
         <HideGoogleSlidesBar>
           <IFrame title="presentation" src={url} />
         </HideGoogleSlidesBar>

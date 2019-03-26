@@ -69,6 +69,15 @@ const PresentationContainer = styled.div`
   flex-direction: row;
 `;
 
+const styles = {
+  fourThree: {
+    flex: 2,
+  },
+  fullWidth: {
+    flex: 1,
+  },
+};
+
 class PresentationDetails extends Component {
   state = {
     deleteDialogOpen: false,
@@ -158,7 +167,10 @@ class PresentationDetails extends Component {
           </IconButton>*/}
         </Row>
         <PresentationContainer>
-          <PresentationPreview presentation={presentation} />
+          <PresentationPreview
+            presentation={presentation}
+            style={ttapp ? styles.fourThree : styles.fullWidth}
+          />
           {ttapp ? <TTApp delay={delay} /> : undefined}
         </PresentationContainer>
         <Dialog

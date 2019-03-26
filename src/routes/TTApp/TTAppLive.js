@@ -13,10 +13,9 @@ const Colors = {
 
 const styles = {
   container: {
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    // backgroundColor: 'green',
-    width: 321,
     borderLeft: '1px solid ' + Colors.gray,
   },
   header: {
