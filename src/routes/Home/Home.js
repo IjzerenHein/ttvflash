@@ -11,7 +11,9 @@ const Container = styled.div`
   flex-direction: row;
 `;
 
-class Home extends React.Component<{}> {
+interface PropsType {}
+
+class Home extends React.Component<PropsType> {
   render() {
     return (
       <Container>
