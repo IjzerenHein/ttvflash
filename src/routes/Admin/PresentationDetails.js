@@ -32,18 +32,18 @@ const Container = styled(Card)`
 `;
 
 const Row = styled.div`
+  align-items: center;
   display: flex;
   height: 60px;
   padding: 0 16px 0 16px;
   flex-direction: row;
-  align-items: center;
 `;
 
 const PresentationContainer = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: row;
   margin-top: 8px;
+  flex-direction: row;
 `;
 
 const styles = {
