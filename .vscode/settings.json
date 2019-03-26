@@ -9,5 +9,11 @@
     "**/build": true,
     "**/node_modules": true,
     "**/__generated__": true
+  },
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#a90201",
+    "titleBar.inactiveBackground": "#a9020199",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveForeground": "#e7e7e799"
   }
 }
