@@ -16,7 +16,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     // backgroundColor: 'green',
-    width: 335,
+    width: 321,
     borderLeft: '1px solid ' + Colors.gray,
   },
   header: {
@@ -27,7 +27,7 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '0 16px',
-    height: '109px',
+    height: '104px',
     // height: '120px',
   },
   headerLeft: {
