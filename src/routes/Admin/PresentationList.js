@@ -7,11 +7,7 @@ import {
   loggedInUser,
 } from '../../store';
 import { observer } from 'mobx-react';
-import Button from 'material-ui/Button';
-import AddIcon from 'material-ui-icons/Add';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
+import { Pane, IconButton, Heading } from 'evergreen-ui';
 import List from 'material-ui/List';
 import PresentationListItem from './PresentationListItem';
 
@@ -22,28 +18,32 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const Title = styled(Typography)`
-  flex: 1;
-`;
-
 class PresentationList extends Component {
   render() {
     return (
       <Container>
-        <AppBar position="static" color="default">
-          <Toolbar>
-            <Title type="title" color="inherit">
-              Presentaties
-            </Title>
-            {loggedInUser.get() ? (
-              <Button fab mini color="primary" onClick={this.onClickAdd}>
-                <AddIcon />
-              </Button>
-            ) : (
-              undefined
-            )}
-          </Toolbar>
-        </AppBar>
+        <Pane
+          background="tint2"
+          paddingLeft={16}
+          paddingRight={16}
+          height={64}
+          display="flex"
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Heading size={600}>Presentaties</Heading>
+          {loggedInUser.get() ? (
+            <IconButton
+              appearance="minimal"
+              icon="add"
+              height={44}
+              onClick={this.onClickAdd}
+            />
+          ) : (
+            undefined
+          )}
+        </Pane>
         <List>
           {presentations.docs.map(doc => (
             <PresentationListItem

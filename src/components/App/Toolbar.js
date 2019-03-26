@@ -1,22 +1,9 @@
 /* @flow */
 import React from 'react';
-import AppBar from 'material-ui/AppBar';
-import MuiToolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import styled from 'styled-components';
-
+import { Pane, Button, Heading } from 'evergreen-ui';
 import { auth } from '../../store';
 import history from '../../history';
 import LoginDialog from './LoginDialog';
-
-const Title = styled(Typography)`
-  && {
-    flex: 1;
-    text-align: left;
-    cursor: pointer;
-  }
-`;
 
 function goAdmin() {
   history.push('/admin');
@@ -60,32 +47,38 @@ class Toolbar extends React.Component<PropsType, StateType> {
 
   render() {
     return (
-      <AppBar color="accent" position="static">
-        <MuiToolbar>
-          <Title type="title" color="inherit" onClick={goAdmin}>
-            TTV Flash Presentatie Beheer
-          </Title>
-          {this.props.user && (
-            <React.Fragment>
-              <Button color="inherit" onClick={this.goToAccount}>
-                {this.props.user.displayName || ''}
-              </Button>
-              <Button color="inherit" onClick={auth.signOut}>
-                Afmelden
-              </Button>
-            </React.Fragment>
-          )}
-          {this.props.user === null && (
-            <Button color="inherit" onClick={auth.showLoginDialog}>
-              Aanmelden
+      <Pane
+        background="tint1"
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        height={64}
+        padding={16}
+      >
+        <Heading size={700} onClick={goAdmin}>
+          TTV Flash Presentatie Beheer
+        </Heading>
+        {this.props.user && (
+          <Pane display="flex" flexDirection="row">
+            <Button appearance="minimal" onClick={this.goToAccount}>
+              {this.props.user.displayName || ''}
             </Button>
-          )}
-        </MuiToolbar>
+            <Button intent="danger" onClick={auth.signOut}>
+              Afmelden
+            </Button>
+          </Pane>
+        )}
+        {this.props.user === null && (
+          <Button appearance="primary" onClick={auth.showLoginDialog}>
+            Aanmelden
+          </Button>
+        )}
         <LoginDialog
           open={this.state.loginDialogOpen}
           onClose={this.hideLogin}
         />
-      </AppBar>
+      </Pane>
     );
   }
 }

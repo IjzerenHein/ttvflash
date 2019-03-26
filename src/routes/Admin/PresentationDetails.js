@@ -6,26 +6,22 @@ import {
   defaultPresentationSetting,
 } from '../../store';
 import { observer } from 'mobx-react';
+import {
+  Pane,
+  Heading,
+  IconButton,
+  Button,
+  Icon,
+  TextInput,
+  Switch,
+} from 'evergreen-ui';
 import Card from 'material-ui/Card';
-import Button from 'material-ui/Button';
-import Checkbox from 'material-ui/Checkbox';
-import IconButton from 'material-ui/IconButton';
-import Avatar from 'material-ui/Avatar';
-import DeleteIcon from 'material-ui-icons/Delete';
-import TVIcon from 'material-ui-icons/Tv';
-import LinkIcon from 'material-ui-icons/Link';
-import RefreshIcon from 'material-ui-icons/Refresh';
-// import OpenIcon from 'material-ui-icons/OpenInNew';
-import ControlledTextField from '../../components/ControlledTextField/ControlledTextField';
 import Dialog, {
   DialogActions,
   DialogTitle,
   DialogContent,
   DialogContentText,
 } from 'material-ui/Dialog';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
 import PresentationPreview from '../Home/PresentationPreview';
 import TTApp from '../TTApp';
 
@@ -35,38 +31,19 @@ const Container = styled(Card)`
   flex-direction: column;
 `;
 
-const Title = styled(Typography)`
-  flex: 1;
-`;
-
 const Row = styled.div`
   display: flex;
-  height: 64px;
-  padding: 5px 20px 5px 20px;
+  height: 60px;
+  padding: 0 16px 0 16px;
   flex-direction: row;
   align-items: center;
-`;
-
-const Logo = styled(Avatar)`
-  margin-right: 20px;
-`;
-
-const Input = styled(ControlledTextField)`
-  flex: 1;
-`;
-
-const DelayInput = styled(ControlledTextField)`
-  width: 120px;
-`;
-
-const StandardButton = styled(Button)`
-  margin: 0 10px 0 20px;
 `;
 
 const PresentationContainer = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
+  margin-top: 8px;
 `;
 
 const styles = {
@@ -88,76 +65,119 @@ class PresentationDetails extends Component {
     const { deleteDialogOpen } = this.state;
     const disabled = loggedInUser.get() ? false : true;
     if (!presentation || !presentation.ref) return <Container />;
-    const { name, url, delay, ttapp } = presentation.data;
+    const { name, url, delay, ttapp, startAt, endAt } = presentation.data;
     const isDefault =
       presentation.id === defaultPresentationSetting.data.presentationId;
     return (
       <Container>
-        <AppBar position="static" color="default">
-          <Toolbar>
-            <Title type="title" color="inherit">
-              {'Presentatie' + (isDefault ? ' (Standaard)' : '')}
-            </Title>
-            {!disabled && (
-              <StandardButton
-                raised
-                disabled={isDefault}
-                color="primary"
-                onClick={this.onClickMakeDefault}
-              >
-                Stel in als standaard
-              </StandardButton>
-            )}
-            {!disabled && (
-              <IconButton aria-label="Ververs" onClick={this.onClickRefresh}>
-                <RefreshIcon />
-              </IconButton>
-            )}
-            {!disabled && (
-              <IconButton aria-label="Verwijder" onClick={this.onClickDelete}>
-                <DeleteIcon />
-              </IconButton>
-            )}
-          </Toolbar>
-        </AppBar>
+        <Pane
+          background="tint2"
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          paddingLeft={16}
+          paddingRight={16}
+          marginBottom={8}
+          height={64}
+        >
+          <Heading size={600} flex={1}>
+            {'Presentatie' + (isDefault ? ' (Standaard)' : '')}
+          </Heading>
+          {!disabled && (
+            <Button
+              disabled={isDefault}
+              appearance="minimal"
+              onClick={this.onClickMakeDefault}
+            >
+              Stel in als standaard
+            </Button>
+          )}
+          {!disabled && (
+            <IconButton
+              marginLeft={16}
+              aria-label="Herladen"
+              icon="refresh"
+              onClick={this.onClickRefresh}
+            />
+          )}
+          {!disabled && (
+            <IconButton
+              marginLeft={16}
+              aria-label="Verwijder"
+              intent="danger"
+              icon="trash"
+              onClick={this.onClickDelete}
+            />
+          )}
+        </Pane>
         <Row>
-          <Logo>
-            <TVIcon />
-          </Logo>
-          <Input
-            id="name"
-            label="Naam"
-            disabled={disabled}
-            value={name || ''}
-            onChange={event => this.onChangeValue('name', event)}
-          />
-          <DelayInput
-            id="delay"
-            type="number"
-            label="Wachttijd (sec)"
-            disabled={disabled}
-            value={delay || ''}
-            onChange={event => this.onChangeValue('delay', event)}
-          />
+          <Icon icon="edit" size={32} />
+          <Pane display="flex" flexDirection="column" flex={1} marginLeft={16}>
+            <Heading size={100}>Naam</Heading>
+            <TextInput
+              id="name"
+              width={'100%'}
+              placeholder="bijv: Club X"
+              disabled={disabled}
+              value={name || ''}
+              onChange={event => this.onChangeValue('name', event)}
+            />
+          </Pane>
+          <Pane display="flex" flexDirection="column" flex={1} marginLeft={16}>
+            <Heading size={100}>Start op (dddd HH:mm)</Heading>
+            <TextInput
+              id="startAt"
+              placeholder="bijv: Dinsdag 08:00"
+              disabled={disabled}
+              value={startAt || ''}
+              onChange={event => this.onChangeValue('startAt', event)}
+            />
+          </Pane>
+          <Pane display="flex" flexDirection="column" flex={1} marginLeft={16}>
+            <Heading size={100}>Endig op (dddd HH:mm)</Heading>
+            <TextInput
+              id="endAt"
+              placeholder="bijv: Dinsdag 18:00"
+              disabled={disabled}
+              value={endAt || ''}
+              onChange={event => this.onChangeValue('endAt', event)}
+            />
+          </Pane>
         </Row>
         <Row>
-          <Logo>
-            <LinkIcon />
-          </Logo>
-          <Input
-            id="url"
-            label="Url (https://docs.google.com/presentation/../embed)"
-            disabled={disabled}
-            value={url || ''}
-            onChange={event => this.onChangeValue('url', event)}
-          />
-          <Checkbox
-            id="ttapp"
-            label="Show TTApp"
-            disabled={disabled}
-            checked={ttapp || false}
-            onChange={event => this.onChangeValue('ttapp', event)}
-          />
+          <Icon icon="presentation" size={32} />
+          <Pane display="flex" flexDirection="column" flex={1} marginLeft={16}>
+            <Heading size={100}>Url</Heading>
+            <TextInput
+              id="url"
+              width={'100%'}
+              placeholder="bijv: https://docs.google.com/presentation/../embed"
+              disabled={disabled}
+              value={url || ''}
+              onChange={event => this.onChangeValue('url', event)}
+            />
+          </Pane>
+          <Pane display="flex" flexDirection="column" marginLeft={16}>
+            <Heading size={100}>Wachttijd</Heading>
+            <TextInput
+              id="delay"
+              placeholder="bijv: 10 sec"
+              disabled={disabled}
+              value={delay || ''}
+              onChange={event => this.onChangeValue('delay', event)}
+            />
+          </Pane>
+          <Pane display="flex" flexDirection="column" marginLeft={16}>
+            <Heading size={100}>TTApp</Heading>
+            <Switch
+              flex={1}
+              id="url"
+              checked={ttapp || false}
+              disabled={disabled}
+              value={url || ''}
+              onChange={event => this.onChangeValue('ttapp', event)}
+            />
+          </Pane>
           {/*<IconButton
             aria-label="Open"
             color="primary"
@@ -205,7 +225,7 @@ class PresentationDetails extends Component {
   async onChangeValue(field, event) {
     const value = field === 'ttapp' ? event.target.checked : event.target.value;
     console.log('onchangeValue: ', field, value, event);
-    if (!value && value !== false) return;
+    if (!value && value !== false && value !== '') return;
 
     const fields = {};
     fields[field] = value;
