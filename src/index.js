@@ -7,6 +7,9 @@ import { auth } from './store';
 import history from './history';
 import routes from './routes';
 import registerServiceWorker from './registerServiceWorker';
+import { version } from '../package.json';
+
+console.log(`TTVFlash Presentatie App v${version} 🏓`);
 
 const render = props =>
   new Promise((resolve, reject) => {
