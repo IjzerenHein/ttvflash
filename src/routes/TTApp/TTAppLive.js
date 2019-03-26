@@ -119,7 +119,7 @@ const styles = {
   },
   heading2: {
     fontFamily: "'PT Sans', sans-serif",
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: 'bold',
   },
   heading3: {

@@ -2,7 +2,7 @@
 import firebase from '@firebase/app';
 import 'firebase/firestore';
 import { initFirestorter, Collection, Document } from 'firestorter';
-import { observable } from 'mobx';
+import { observable, reaction } from 'mobx';
 import { auth } from './auth';
 
 firebase.initializeApp({
@@ -44,3 +44,22 @@ export function setActivePresentation(presentationId?: string) {
     activePresentation.path = 'presentations/' + presentationId;
   }
 }
+
+export const reloadSettings = new Document('settings/reload', {
+  debug: true,
+  debugName: 'ReloadSettings',
+});
+let triggerReloadCache = undefined;
+reaction(
+  () => reloadSettings.data.triggerReload,
+  triggerReload => {
+    if (
+      triggerReloadCache !== undefined &&
+      triggerReload !== triggerReloadCache
+    ) {
+      window.location.reload();
+    }
+    triggerReloadCache = triggerReload;
+  },
+  { fireImmediately: true },
+);
