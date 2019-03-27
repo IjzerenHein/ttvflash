@@ -26,8 +26,7 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '0 16px',
-    height: '104px',
-    // height: '120px',
+    height: '102px',
   },
   headerLeft: {
     display: 'flex',
@@ -67,7 +66,7 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     borderBottom: '1px solid ' + Colors.gray,
-    height: '52px',
+    height: '50px',
   },
   matchFooter: {
     display: 'flex',
