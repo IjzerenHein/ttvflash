@@ -4,6 +4,7 @@ import { observer, TTAppStore } from '../../store';
 import Clock from 'react-live-clock';
 import * as moment from 'moment';
 import 'moment/locale/nl';
+import { Howl } from 'howler';
 
 const Colors = {
   red: '#a90201',
@@ -145,6 +146,7 @@ const PageIndex = {
 
 class TTApp extends Component<PropsType, StateType> {
   _timer: any;
+  _eventTimer: any;
   _store = new TTAppStore();
 
   state = {
@@ -158,12 +160,21 @@ class TTApp extends Component<PropsType, StateType> {
         pageIndex: (this.state.pageIndex + 1) % 2,
       });
     }, this.props.delay ? this.props.delay * 1000 : 10000);
+    this._eventTimer = setInterval(() => {
+      const event = this._store.eventStream.pop();
+      if (event) {
+        this.onEvent(event);
+      }
+    }, 10000);
+    // this.playSound(require('../../assets/audio/kermis.m4a'));
   }
 
   componentWillUnmount() {
     this._store.cleanup();
     clearInterval(this._timer);
     this._timer = undefined;
+    clearInterval(this._eventTimer);
+    this._eventTimer = undefined;
   }
 
   renderTeamName(teamid, teamname, team) {
@@ -296,6 +307,56 @@ class TTApp extends Component<PropsType, StateType> {
         {/*this.renderFooter()*/}
       </div>
     );
+  }
+
+  onEvent(event) {
+    console.log('onEvent: ', event.type, ', team: ', event.team.teamName);
+    switch (event.type) {
+      case 'matchUpdated':
+        if (event.match.score1 > event.prevMatch.score1) {
+          if (event.team.teamId === event.match.team1id) {
+            this.onHooray(
+              event.team,
+              event.match.score1 - event.prevMatch.score1,
+            );
+          } else {
+            this.onBooohoo(
+              event.team,
+              event.match.score1 - event.prevMatch.score1,
+            );
+          }
+        } else if (event.match.score2 > event.prevMatch.score2) {
+          if (event.team.teamId === event.match.team2id) {
+            this.onHooray(
+              event.team,
+              event.match.score2 - event.prevMatch.score2,
+            );
+          } else {
+            this.onBooohoo(
+              event.team,
+              event.match.score2 - event.prevMatch.score2,
+            );
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  onHooray(team: any, points: number) {
+    this.playSound(require('../../assets/audio/kermis.m4a'));
+  }
+
+  onBooohoo(team: any, points: number) {
+    this.playSound(require('../../assets/audio/Doh.mp3'));
+  }
+
+  playSound(resource) {
+    const sound = new Howl({
+      src: [resource],
+    });
+    sound.play();
   }
 }
 
