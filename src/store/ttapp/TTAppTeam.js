@@ -1,8 +1,9 @@
 /* @flow */
-import { observable, runInAction } from 'mobx';
+import { observable, runInAction, toJS } from 'mobx';
 import type { IObservableValue } from 'mobx';
 import { TTAppAPI } from './TTAppAPI';
 import moment from 'moment';
+import { TTAppEventStream } from './TTAppEventStream';
 
 export class TTAppTeam {
   _api: TTAppAPI;
@@ -11,9 +12,16 @@ export class TTAppTeam {
   _poule: IObservableValue<any>;
   _lastUpdated: IObservableValue<Date>;
   _interval: any;
+  _eventStream: TTAppEventStream;
 
-  constructor(config: { api: TTAppAPI, group: any, team: any }) {
+  constructor(config: {
+    api: TTAppAPI,
+    group: any,
+    team: any,
+    eventStream: TTAppEventStream,
+  }) {
     this._api = config.api;
+    this._eventStream = config.eventStream;
     this._group = config.group;
     this._team = config.team;
     this._poule = observable.box({});
@@ -24,14 +32,47 @@ export class TTAppTeam {
     const poule = await this._api.getPoule(this.pouleId);
     runInAction(() => this._poule.set(poule));
 
+    let prevLiveMatch = toJS(this.liveMatch);
     this._interval = setInterval(async () => {
       const { liveMatch } = this;
       if (liveMatch) {
+        if (!prevLiveMatch) {
+          prevLiveMatch = toJS(liveMatch);
+          this._eventStream.push({
+            team: this,
+            type: 'matchStarted',
+            match: prevLiveMatch,
+            prevMatch: prevLiveMatch,
+          });
+        }
+
         const poule = await this._api.getPoule(this.pouleId);
         runInAction(() => {
           this._poule.set(poule);
           this._lastUpdated.set(new Date());
         });
+
+        const newLiveMatch = this.liveMatch || liveMatch;
+        if (
+          newLiveMatch.score1 !== prevLiveMatch.score1 ||
+          newLiveMatch.score2 !== prevLiveMatch.score2
+        ) {
+          this._eventStream.push({
+            team: this,
+            type: 'matchUpdated',
+            prevMatch: prevLiveMatch,
+            match: toJS(newLiveMatch),
+          });
+        }
+        prevLiveMatch = toJS(newLiveMatch);
+      } else if (prevLiveMatch) {
+        this._eventStream.push({
+          team: this,
+          type: 'matchEnded',
+          match: prevLiveMatch,
+          prevMatch: prevLiveMatch,
+        });
+        prevLiveMatch = undefined;
       }
     }, 60000);
   }

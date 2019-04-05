@@ -4,12 +4,14 @@ import type { IObservableValue, IObservableArray } from 'mobx';
 import { TTAppAPI } from './TTAppAPI';
 import { TTAppTeam } from './TTAppTeam';
 import moment from 'moment';
+import { TTAppEventStream } from './TTAppEventStream';
 
 // const CLUB_ID = '1057';
 const CLUB_ID = '1088'; // Flash
 
 export class TTAppStore {
   _api = new TTAppAPI();
+  _eventStream = new TTAppEventStream();
   _isEnabled: IObservableValue<boolean> = observable.box(false);
   _club: IObservableValue<any> = observable.box({});
   _teams: IObservableArray<TTAppTeam> = observable.array([]);
@@ -26,6 +28,10 @@ export class TTAppStore {
 
   get teams(): IObservableArray<TTAppTeam> {
     return this._teams;
+  }
+
+  get eventStream(): TTAppEventStream {
+    return this._eventStream;
   }
 
   getMatchForWeek(weekOffset: number = 0): Array<any> | void {
@@ -73,6 +79,7 @@ export class TTAppStore {
           api: this._api,
           group,
           team: teamInfo,
+          eventStream: this._eventStream,
         });
         teams.push(team);
         team.init();
