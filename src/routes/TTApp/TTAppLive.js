@@ -166,7 +166,9 @@ class TTApp extends Component<PropsType, StateType> {
         this.onEvent(event);
       }
     }, 10000);
+    // this.playSound(require('../../assets/audio/alweer-een-winnaar.mp3'));
     // this.playSound(require('../../assets/audio/kermis.m4a'));
+    // TextToSpeech.talk('Hi there!');
   }
 
   componentWillUnmount() {
@@ -315,27 +317,15 @@ class TTApp extends Component<PropsType, StateType> {
       case 'matchUpdated':
         if (event.match.score1 > event.prevMatch.score1) {
           if (event.team.teamId === event.match.team1id) {
-            this.onHooray(
-              event.team,
-              event.match.score1 - event.prevMatch.score1,
-            );
+            this.onHooray(event.team, event.match);
           } else {
-            this.onBooohoo(
-              event.team,
-              event.match.score1 - event.prevMatch.score1,
-            );
+            this.onBooohoo(event.team, event.match);
           }
         } else if (event.match.score2 > event.prevMatch.score2) {
           if (event.team.teamId === event.match.team2id) {
-            this.onHooray(
-              event.team,
-              event.match.score2 - event.prevMatch.score2,
-            );
+            this.onHooray(event.team, event.match);
           } else {
-            this.onBooohoo(
-              event.team,
-              event.match.score2 - event.prevMatch.score2,
-            );
+            this.onBooohoo(event.team, event.match);
           }
         }
         break;
@@ -344,19 +334,34 @@ class TTApp extends Component<PropsType, StateType> {
     }
   }
 
-  onHooray(team: any, points: number) {
-    this.playSound(require('../../assets/audio/kermis.m4a'));
+  matchToText(match: any) {
+    return `${match.team1name} versus ${match.team2name}, ${match.score1}, ${
+      match.score2
+    }`;
   }
 
-  onBooohoo(team: any, points: number) {
-    this.playSound(require('../../assets/audio/Doh.mp3'));
+  async onHooray(team: any, match: any) {
+    // $FlowFixMe
+    await this.playSound(require('../../assets/audio/alweer-een-winnaar.mp3'));
+    // TextToSpeech.talk(this.matchToText(match));
+  }
+
+  async onBooohoo(team: any, match: any) {
+    // $FlowFixMe
+    await this.playSound(require('../../assets/audio/Doh.mp3'));
+    // TextToSpeech.talk(this.matchToText(match));
   }
 
   playSound(resource) {
-    const sound = new Howl({
-      src: [resource],
+    return new Promise(resolve => {
+      const sound = new Howl({
+        src: [resource],
+      });
+      sound.play();
+      sound.on('end', () => {
+        resolve(true);
+      });
     });
-    sound.play();
   }
 }
 
