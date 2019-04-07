@@ -1,5 +1,7 @@
 /* @flow */
 
+const ENABLE_CACHE = false;
+
 export class TTAppAPI {
   _token = undefined;
   _uid = undefined;
@@ -7,12 +9,12 @@ export class TTAppAPI {
 
   async request(fields: any) {
     const cacheKey = JSON.stringify(fields);
-    /*const cache = localStorage.getItem(cacheKey);
-    if (cache) {
+    const cache = localStorage.getItem(cacheKey);
+    if (cache && ENABLE_CACHE) {
       const json = JSON.parse(cache);
       console.log(json);
       return json;
-    }*/
+    }
 
     fields.c = 'site-300';
     if (this._uid) fields.uid = this._uid;
