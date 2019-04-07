@@ -57,12 +57,7 @@ export class TTAppTeam {
           newLiveMatch.score1 !== prevLiveMatch.score1 ||
           newLiveMatch.score2 !== prevLiveMatch.score2
         ) {
-          this._eventStream.push({
-            team: this,
-            type: 'matchUpdated',
-            prevMatch: prevLiveMatch,
-            match: toJS(newLiveMatch),
-          });
+          this._onMatchUpdated(prevLiveMatch, toJS(newLiveMatch));
         }
         prevLiveMatch = toJS(newLiveMatch);
       } else if (prevLiveMatch) {
@@ -154,5 +149,18 @@ export class TTAppTeam {
 
   get groupName(): string {
     return this._group.groupname;
+  }
+
+  _onMatchUpdated(prevMatch: any, match: any) {
+    this._eventStream.push({
+      team: this,
+      type: 'matchUpdated',
+      prevMatch,
+      match,
+      scoredTeamId:
+        match.score1 > prevMatch.score1 ? match.team1Id : match.team2id,
+      scoredTeamName:
+        match.score1 > prevMatch.score1 ? match.team1name : match.team2name,
+    });
   }
 }

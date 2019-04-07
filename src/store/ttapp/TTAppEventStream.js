@@ -6,6 +6,8 @@ export interface TTAppEvent {
   team: TTAppTeam;
   match: any;
   prevMatch: any;
+  scoredTeamId?: number;
+  scoredTeamName?: string;
 }
 
 export class TTAppEventStream {

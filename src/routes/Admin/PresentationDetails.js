@@ -22,8 +22,7 @@ import Dialog, {
   DialogContent,
   DialogContentText,
 } from 'material-ui/Dialog';
-import PresentationPreview from '../Home/PresentationPreview';
-import TTApp from '../TTApp';
+import { FullPresentationView } from '../Home/FullPresentationView';
 
 const Container = styled(Card)`
   flex: 1;
@@ -41,19 +40,10 @@ const Row = styled.div`
 
 const PresentationContainer = styled.div`
   display: flex;
-  flex: 1;
   margin-top: 8px;
+  flex: 1;
   flex-direction: row;
 `;
-
-const styles = {
-  fourThree: {
-    flex: 2,
-  },
-  fullWidth: {
-    flex: 1,
-  },
-};
 
 class PresentationDetails extends Component {
   state = {
@@ -187,11 +177,7 @@ class PresentationDetails extends Component {
           </IconButton>*/}
         </Row>
         <PresentationContainer>
-          <PresentationPreview
-            presentation={presentation}
-            style={ttapp ? styles.fourThree : styles.fullWidth}
-          />
-          {ttapp ? <TTApp delay={delay} /> : undefined}
+          <FullPresentationView presentation={presentation} ttapp={ttapp} />
         </PresentationContainer>
         <Dialog
           open={deleteDialogOpen}

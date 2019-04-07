@@ -6883,6 +6883,13 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-confetti@^2.7.3:
+  version "2.7.3"
+  resolved "https://registry.yarnpkg.com/react-confetti/-/react-confetti-2.7.3.tgz#ad69c0245b821a0ccebee3f309eda5bec772e709"
+  integrity sha512-P4YgLaZJCkWs6KnwKSUHXc+Su4+MxqLquC6pWfN2JyVaSRJQ/+9fzC+dLRgj7umuYeekyDjZMzpIC5//Jl4YDA==
+  dependencies:
+    tween-functions "^1.2.0"
+
 react-dev-utils@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-4.2.1.tgz#9f2763e7bafa1a1b9c52254d2a479deec280f111"
@@ -8350,11 +8357,6 @@ text-table@0.2.0, text-table@^0.2.0, text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-text-to-speech-js@^1.1.9:
-  version "1.1.9"
-  resolved "https://registry.yarnpkg.com/text-to-speech-js/-/text-to-speech-js-1.1.9.tgz#a55a675d485fb4c8a46b96aa64c71b58d1733e21"
-  integrity sha512-18bci54WpIbjmN/2JVNlZ99DHpLw64iBX6LNJcfuK8got5gnfR5nPicgZAp1xUM4VT8Dh+RnLiIkBceLP4oOew==
-
 theming@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/theming/-/theming-1.3.0.tgz#286d5bae80be890d0adc645e5ca0498723725bdc"
@@ -8473,6 +8475,11 @@ tunnel-agent@^0.6.0:
   resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
   dependencies:
     safe-buffer "^5.0.1"
+
+tween-functions@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tween-functions/-/tween-functions-1.2.0.tgz#1ae3a50e7c60bb3def774eac707acbca73bbc3ff"
+  integrity sha1-GuOlDnxguz3vd06scHrLynO7w/8=
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
