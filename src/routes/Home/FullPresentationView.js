@@ -46,7 +46,6 @@ export const FullPresentationView = observer(
           </TTAppProvider>
         );
       } else {
-        console.log('TO');
         return (
           <Container>
             <PresentationPreview
