@@ -42,7 +42,7 @@ export class TTAppAPI {
     }
 
     const body = JSON.stringify(fields);
-    console.log(`FETCHing ${body}...`);
+    //console.log(`FETCHing ${body}...`);
     try {
       const response = await fetch('https://ttapp.nl/api', {
         method: 'post',
@@ -50,7 +50,7 @@ export class TTAppAPI {
       });
       if (response.status !== 200)
         throw new Error(`Invalid status: ${response.status}`);
-      console.log(`FETCHing DONE (status: ${response.status})`);
+      //console.log(`FETCHing DONE (status: ${response.status})`);
       const json = await response.json();
       localStorage.setItem(cacheKey, JSON.stringify(json));
       // console.log(json);
