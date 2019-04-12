@@ -152,15 +152,14 @@ export class TTAppTeam {
   }
 
   _onMatchUpdated(prevMatch: any, match: any) {
+    const team1Scored = (match.score1 || 0) > (prevMatch.score1 || 0);
     this._eventStream.push({
       team: this,
       type: 'matchUpdated',
       prevMatch,
       match,
-      scoredTeamId:
-        match.score1 > prevMatch.score1 ? match.team1Id : match.team2id,
-      scoredTeamName:
-        match.score1 > prevMatch.score1 ? match.team1name : match.team2name,
+      scoredTeamId: team1Scored ? match.team1Id : match.team2id,
+      scoredTeamName: team1Scored ? match.team1name : match.team2name,
     });
   }
 }
