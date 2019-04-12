@@ -46,7 +46,7 @@ export class TTAppAPI {
     try {
       const response = await fetch('https://ttapp.nl/api', {
         method: 'post',
-        body: JSON.stringify(fields),
+        body,
       });
       if (response.status !== 200)
         throw new Error(`Invalid status: ${response.status}`);
