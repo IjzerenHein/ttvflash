@@ -158,7 +158,7 @@ export class TTAppTeam {
       type: 'matchUpdated',
       prevMatch,
       match,
-      scoredTeamId: team1Scored ? match.team1Id : match.team2id,
+      scoredTeamId: team1Scored ? match.team1id : match.team2id,
       scoredTeamName: team1Scored ? match.team1name : match.team2name,
     });
   }
