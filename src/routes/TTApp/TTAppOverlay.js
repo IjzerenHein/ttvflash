@@ -124,7 +124,22 @@ export const TTAppOverlay = observer(
     }
 
     onEvent(event) {
-      console.log('onEvent: ', event.type, ', team: ', event.team.teamName);
+      console.log(
+        'onEvent: ',
+        event.type,
+        ', team: ',
+        event.team.teamName,
+        ', teamId: ',
+        event.team.teamId,
+        ', scoredTeamName: ',
+        event.scoredTeamName,
+        ', scoredTeamId: ',
+        event.scoredTeamId,
+        ', score1: ',
+        event.match.score1,
+        ', score2: ',
+        event.match.score2,
+      );
       switch (event.type) {
         case 'matchUpdated':
           if (event.scoredTeamId === event.team.teamId) {
