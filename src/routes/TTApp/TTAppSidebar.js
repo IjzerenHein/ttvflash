@@ -4,6 +4,7 @@ import { observer, TTAppStore } from '../../store';
 import Clock from 'react-live-clock';
 import * as moment from 'moment';
 import 'moment/locale/nl';
+import { version } from '../../../package.json';
 
 const Colors = {
   red: '#a90201',
@@ -229,7 +230,7 @@ export const TTAppSidebar = observer(
             .endOf('week')
             .format('dddd D MMMM')}`
         : moment().format('dddd D MMMM');*/
-      const subTitle = 'Powered by TTApp';
+      const subTitle = `Powered by TTApp - v${version}`;
       switch (this.state.pageIndex) {
         case PageIndex.CURRENT:
           title = 'Deze week';
