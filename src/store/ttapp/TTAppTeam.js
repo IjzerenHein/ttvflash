@@ -54,8 +54,8 @@ export class TTAppTeam {
 
         const newLiveMatch = this.liveMatch || liveMatch;
         if (
-          newLiveMatch.score1 !== prevLiveMatch.score1 ||
-          newLiveMatch.score2 !== prevLiveMatch.score2
+          (newLiveMatch.score1 || 0) !== (prevLiveMatch.score1 || 0) ||
+          (newLiveMatch.score2 || 0) !== (prevLiveMatch.score2 || 0)
         ) {
           this._onMatchUpdated(prevLiveMatch, toJS(newLiveMatch));
         }
