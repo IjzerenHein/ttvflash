@@ -116,9 +116,8 @@ export const TTAppOverlay = observer(
           <div style={styles.heading1}>{`${scoredTeamName ||
             ''} heeft gescoord`}</div>
           <div style={styles.heading2}>
-            {`${match.team1name} - ${match.team2name} (${match.score1} - ${
-              match.score2
-            })`}
+            {`${match.team1name} - ${match.team2name} (${match.score1 ||
+              0} - ${match.score2 || 0})`}
           </div>
         </div>
       );
@@ -140,9 +139,8 @@ export const TTAppOverlay = observer(
     }
 
     matchToText(match: any) {
-      return `${match.team1name} versus ${match.team2name}, ${match.score1}, ${
-        match.score2
-      }`;
+      return `${match.team1name} versus ${match.team2name}, ${match.score1 ||
+        0}, ${match.score2 || 0}`;
     }
 
     async onHooray(team: any, match: any) {
