@@ -15,7 +15,7 @@ const Colors = {
 const styles = {
   container: {
     position: 'absolute',
-    backgroundColor: '#FFFFFFd0',
+    backgroundColor: 'rgba(255,255,255,0.9)',
     left: 0,
     right: 0,
     bottom: 0,
@@ -64,7 +64,7 @@ export const TTAppOverlay = observer(
     };
 
     componentDidMount() {
-      /*const event = {
+      const event = {
         type: 'matchUpdated',
         team: {
           teamId: 1,
@@ -80,7 +80,7 @@ export const TTAppOverlay = observer(
         scoredTeamId: 1,
         scoredTeamName: 'Flash 1',
       };
-      this.props.store.eventStream.push(event);*/
+      this.props.store.eventStream.push(event);
 
       this._timer = setInterval(() => {
         const event = this.props.store.eventStream.pop();
