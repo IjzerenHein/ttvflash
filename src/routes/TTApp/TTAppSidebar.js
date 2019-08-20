@@ -233,10 +233,10 @@ export const TTAppSidebar = observer(
       const subTitle = `Powered by TTApp - v${version}`;
       switch (this.state.pageIndex) {
         case PageIndex.CURRENT:
-          title = 'Deze week';
+          title = 'Wedstrijden';
           break;
         case PageIndex.PREVIOUS:
-          title = 'Vorige week';
+          title = 'Eerder gespeeld';
           break;
         case PageIndex.STANDINGS:
           title = 'Standen';
@@ -277,14 +277,21 @@ export const TTAppSidebar = observer(
 
     render() {
       const { pageIndex } = this.state;
-      const matches =
-        pageIndex === PageIndex.PREVIOUS
-          ? this.props.store.getMatchForWeek(-1) ||
-            this.props.store.getMatchForWeek(-2) ||
-            this.props.store.getMatchForWeek(-3)
-          : this.props.store.getMatchForWeek(0) ||
-            this.props.store.getMatchForWeek(1) ||
-            this.props.store.getMatchForWeek(2);
+
+      let matches;
+      for (let i = 0; i < 6; i++) {
+        matches = this.props.store.getMatchForWeek(i);
+        if (matches) {
+          if (pageIndex === PageIndex.PREVIOUS) {
+            matches = undefined;
+            for (let j = i - 1; j <= i - 6; j--) {
+              matches = this.props.store.getMatchForWeek(j);
+              if (matches) break;
+            }
+          }
+          break;
+        }
+      }
       return (
         <div style={styles.container}>
           {this.renderHeader(matches)}
