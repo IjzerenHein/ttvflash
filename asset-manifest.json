@@ -1,9 +1,11 @@
 {
-  "Account.js": "static/js/Account.30de2d76.chunk.js",
-  "Account.js.map": "static/js/Account.30de2d76.chunk.js.map",
-  "home.js": "static/js/home.0c287958.chunk.js",
-  "home.js.map": "static/js/home.0c287958.chunk.js.map",
-  "main.js": "static/js/main.6ac8bdab.js",
-  "main.js.map": "static/js/main.6ac8bdab.js.map",
+  "Account.js": "static/js/Account.a4f99d2a.chunk.js",
+  "Account.js.map": "static/js/Account.a4f99d2a.chunk.js.map",
+  "home.js": "static/js/home.dcd33a5f.chunk.js",
+  "home.js.map": "static/js/home.dcd33a5f.chunk.js.map",
+  "main.js": "static/js/main.2f668ab0.js",
+  "main.js.map": "static/js/main.2f668ab0.js.map",
+  "static/media/Doh.mp3": "static/media/Doh.bc29203f.mp3",
+  "static/media/alweer-een-winnaar.mp3": "static/media/alweer-een-winnaar.965eaa26.mp3",
   "static/media/ttapp.png": "static/media/ttapp.918d637a.png"
 }
