@@ -285,7 +285,7 @@ export const TTAppSidebar = observer(
         if (matches) {
           if (pageIndex === PageIndex.PREVIOUS) {
             matches = undefined;
-            for (let j = i - 1; j <= i - 6; j--) {
+            for (let j = i - 1; j > i - 6; j--) {
               matches = store.getMatchesForWeek(j);
               if (matches) break;
             }
