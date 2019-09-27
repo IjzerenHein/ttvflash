@@ -54,9 +54,8 @@ export class TTAppStore {
           isLive: match ? team.isMatchLive(match) : undefined,
         };
       })
-      .filter(({ match }) => match)
-      // $$FlowFixMe
-      .sort((a, b) => a.match.playtime.localeCompare(b.match.playtime));
+      .filter(({ match }) => match);
+    //.sort((a, b) => a.match.playtime.localeCompare(b.match.playtime));
     // $$FlowFixMe
     return result.length ? result : undefined;
   }
@@ -96,6 +95,7 @@ export class TTAppStore {
         team.init();
       }
     }
+    teams.sort((a, b) => a.teamNumber - b.teamNumber);
     runInAction(() => {
       this._lastUpdated.set(new Date());
       this._club.set(club);

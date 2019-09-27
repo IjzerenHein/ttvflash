@@ -128,6 +128,11 @@ export class TTAppTeam {
     return this._team.teamname;
   }
 
+  get teamNumber(): number {
+    const comps = this.teamName.split(' ');
+    return parseInt(comps[comps.length - 1], 10);
+  }
+
   get isYouthTeam(): boolean {
     return this.groupName === 'Jeugd';
   }
