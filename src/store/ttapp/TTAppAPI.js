@@ -1,7 +1,7 @@
 /* @flow */
 import type { Poule, Match, Club, Group, Semester } from './types';
 
-const ENABLE_CACHE = false;
+const ENABLE_CACHE = true;
 
 export class TTAppAPI {
   _token = undefined;
