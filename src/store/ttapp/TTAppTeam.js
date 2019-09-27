@@ -4,12 +4,12 @@ import type { IObservableValue } from 'mobx';
 import { TTAppAPI } from './TTAppAPI';
 import moment from 'moment';
 import { TTAppEventStream } from './TTAppEventStream';
-import type { Match } from './types';
+import type { Match, Group, Team } from './types';
 
 export class TTAppTeam {
   _api: TTAppAPI;
-  _group: any;
-  _team: any;
+  _group: Group;
+  _team: Team;
   _poule: IObservableValue<any>;
   _lastUpdated: IObservableValue<Date>;
   _interval: any;
@@ -18,7 +18,7 @@ export class TTAppTeam {
   constructor(config: {
     api: TTAppAPI,
     group: any,
-    team: any,
+    team: Team,
     eventStream: TTAppEventStream,
   }) {
     this._api = config.api;
@@ -128,7 +128,11 @@ export class TTAppTeam {
     return this._team.teamname;
   }
 
-  get pouleId(): string {
+  get isYouthTeam(): boolean {
+    return this.groupName === 'Jeugd';
+  }
+
+  get pouleId(): number {
     return this._team.pouleid;
   }
 

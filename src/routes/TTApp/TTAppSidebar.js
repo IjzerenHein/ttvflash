@@ -23,17 +23,15 @@ const styles = {
     backgroundColor: Colors.lightGray,
     borderBottom: '1px solid ' + Colors.gray,
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
     padding: '0 16px',
     height: '102px',
   },
-  headerLeft: {
+  headerTop: {
     display: 'flex',
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   footer: {
     display: 'flex',
@@ -106,6 +104,7 @@ const styles = {
     fontFamily: "'PT Sans', sans-serif",
     fontSize: 15,
     fontWeight: 'bold',
+    whiteSpace: 'nowrap',
   },
   caption: {
     fontFamily: "'PT Sans', sans-serif",
@@ -116,16 +115,19 @@ const styles = {
     fontFamily: "'PT Sans', sans-serif",
     fontSize: 44,
     fontWeight: 'bold',
+    lineHeight: '41px',
   },
   heading2: {
     fontFamily: "'PT Sans', sans-serif",
     fontSize: 30,
     fontWeight: 'bold',
+    whiteSpace: 'nowrap',
   },
   heading3: {
     fontFamily: "'PT Sans', sans-serif",
     fontSize: 24,
     fontWeight: 'bold',
+    whiteSpace: 'nowrap',
   },
 };
 
@@ -141,8 +143,10 @@ interface StateType {
 const PageIndex = {
   CURRENT: 0,
   PREVIOUS: 1,
-  STANDINGS: 2,
+  YOUTH: 2,
+  //STANDINGS: 3,
 };
+const PageCount = 3;
 
 export const TTAppSidebar = observer(
   class TTAppSidebar extends Component<PropsType, StateType> {
@@ -154,7 +158,7 @@ export const TTAppSidebar = observer(
     componentDidMount() {
       this._timer = setInterval(() => {
         this.setState({
-          pageIndex: (this.state.pageIndex + 1) % 2,
+          pageIndex: (this.state.pageIndex + 1) % PageCount,
         });
       }, this.props.delay ? this.props.delay * 1000 : 10000);
     }
@@ -166,11 +170,9 @@ export const TTAppSidebar = observer(
 
     renderTeamName(teamid, teamname, team) {
       const isOwnTeam = teamid === team.teamId;
-      const name =
-        isOwnTeam && team.groupName !== 'Senioren'
-          ? `${team.groupName} ${teamname}`
-          : teamname;
-      return <span style={isOwnTeam ? styles.ownteam : undefined}>{name}</span>;
+      return (
+        <span style={isOwnTeam ? styles.ownteam : undefined}>{teamname}</span>
+      );
     }
 
     renderMatch(team, match, isLive) {
@@ -186,7 +188,7 @@ export const TTAppSidebar = observer(
             <div style={styles.matchFooter}>
               {isLive ? <div style={styles.live}>Live</div> : undefined}
               <div style={styles.caption}>{`${moment(match.playtime).format(
-                'dddd D MMMM, HH:mm',
+                'dddd D MMM, HH:mm',
               )}`}</div>
             </div>
           </div>
@@ -198,7 +200,7 @@ export const TTAppSidebar = observer(
       );
     }
 
-    renderMatches(matches) {
+    renderMatches(matches, title) {
       if (!matches) {
         return (
           <div style={styles.noMatches}>
@@ -209,6 +211,19 @@ export const TTAppSidebar = observer(
       }
       return (
         <div style={styles.matches}>
+          {title ? (
+            <div
+              style={{
+                ...styles.heading2,
+                color: Colors.red,
+                padding: '0 16px',
+              }}
+            >
+              {title}
+            </div>
+          ) : (
+            undefined
+          )}
           {matches.map(({ team, match, isLive }) =>
             this.renderMatch(team, match, isLive),
           )}
@@ -216,42 +231,18 @@ export const TTAppSidebar = observer(
       );
     }
 
-    renderStandings() {
-      // TODO
-      return undefined;
-    }
-
-    renderHeader(matches) {
-      let title = '';
-      /*const subTitle = matches
-        ? `${moment(matches[0].match.playdate)
-            .startOf('week')
-            .format('dddd D MMMM')} - ${moment(matches[0].match.playdate)
-            .endOf('week')
-            .format('dddd D MMMM')}`
-        : moment().format('dddd D MMMM');*/
-      const subTitle = `Powered by TTApp - v${version}`;
-      switch (this.state.pageIndex) {
-        case PageIndex.CURRENT:
-          title = 'Wedstrijden';
-          break;
-        case PageIndex.PREVIOUS:
-          title = 'Eerder gespeeld';
-          break;
-        case PageIndex.STANDINGS:
-          title = 'Standen';
-          break;
-        default:
-          break;
-      }
-
+    renderHeader(title: string) {
       return (
         <div style={styles.header}>
-          <div style={styles.headerLeft}>
-            <div style={styles.heading2}>{title}</div>
-            <div style={styles.caption}>{subTitle}</div>
+          <div style={styles.headerTop}>
+            <Clock
+              ticking={true}
+              style={{ ...styles.heading2, flex: 1 }}
+              format="D MMM"
+            />{' '}
+            <Clock ticking={true} style={styles.heading1} format="HH:mm" />
           </div>
-          <Clock ticking={true} style={styles.heading1} />
+          <div style={{ ...styles.heading2, color: Colors.red }}>{title}</div>
         </div>
       );
     }
@@ -261,7 +252,7 @@ export const TTAppSidebar = observer(
       return (
         <div style={styles.footer}>
           <div style={styles.footerLeft}>
-            <div style={styles.body2}>{`Powered by TTApp`}</div>
+            <div style={styles.body2}>{`Powered by TTApp - v${version}`}</div>
             <div style={styles.caption}>{`Laatst bijgewerkt ${
               lastUpdated ? moment(lastUpdated).format('HH:MM') : ''
             }`}</div>
@@ -280,26 +271,50 @@ export const TTAppSidebar = observer(
       const { pageIndex } = this.state;
 
       let matches;
+      let prevMatches;
+      const isYouth = pageIndex === PageIndex.YOUTH;
       for (let i = 0; i < 6; i++) {
-        matches = store.getMatchesForWeek(i);
+        matches = store.getMatchesForWeek(i, isYouth);
         if (matches) {
-          if (pageIndex === PageIndex.PREVIOUS) {
-            matches = undefined;
-            for (let j = i - 1; j > i - 6; j--) {
-              matches = store.getMatchesForWeek(j);
-              if (matches) break;
-            }
+          for (let j = i - 1; j > i - 6; j--) {
+            prevMatches = store.getMatchesForWeek(j, isYouth);
+            if (prevMatches) break;
           }
           break;
         }
       }
+
+      let title = 'Senioren';
+      let content;
+      switch (pageIndex) {
+        case PageIndex.CURRENT:
+          content = this.renderMatches(matches);
+          title = 'Wedstrijden';
+          break;
+        case PageIndex.PREVIOUS:
+          content = this.renderMatches(prevMatches);
+          title = 'Eerder gespeeld';
+          break;
+        case PageIndex.YOUTH:
+          title = 'Jeugd wedstrijden';
+          content = (
+            <div style={styles.matches}>
+              {this.renderMatches(matches)}
+              {prevMatches
+                ? this.renderMatches(prevMatches, 'Jeugd - gespeeld')
+                : undefined}
+            </div>
+          );
+          break;
+        default:
+          break;
+      }
+
       return (
         <div style={styles.container}>
-          {this.renderHeader(matches)}
-          {pageIndex === PageIndex.STANDINGS
-            ? this.renderStandings()
-            : this.renderMatches(matches)}
-          {/*this.renderFooter()*/}
+          {this.renderHeader(title)}
+          {content}
+          {this.renderFooter()}
         </div>
       );
     }

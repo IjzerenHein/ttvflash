@@ -37,6 +37,7 @@ export class TTAppStore {
 
   getMatchesForWeek(
     weekOffset: number = 0,
+    isYouth: boolean = false,
   ): Array<{
     team: TTAppTeam,
     match: Match,
@@ -44,6 +45,7 @@ export class TTAppStore {
   }> | void {
     const date = moment(this._api.currentDate).add(weekOffset, 'week');
     const result = this.teams
+      .filter(team => team.isYouthTeam === isYouth)
       .map(team => {
         const match = team.getMatchForWeek(date);
         return {

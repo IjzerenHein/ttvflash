@@ -91,7 +91,7 @@ export class TTAppAPI {
     });
   }
 
-  getPoule(teamId: string): Promise<Poule> {
+  getPoule(teamId: number): Promise<Poule> {
     return this.request({
       task: 'poule',
       p: teamId,
