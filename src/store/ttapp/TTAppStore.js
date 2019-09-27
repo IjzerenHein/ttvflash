@@ -5,6 +5,7 @@ import { TTAppAPI } from './TTAppAPI';
 import { TTAppTeam } from './TTAppTeam';
 import moment from 'moment';
 import { TTAppEventStream } from './TTAppEventStream';
+import type { Club, Match } from './types';
 
 // const CLUB_ID = '1057';
 const CLUB_ID = '1088'; // Flash
@@ -13,7 +14,7 @@ export class TTAppStore {
   _api = new TTAppAPI();
   _eventStream = new TTAppEventStream();
   _isEnabled: IObservableValue<boolean> = observable.box(false);
-  _club: IObservableValue<any> = observable.box({});
+  _club: IObservableValue<Club> = observable.box({});
   _teams: IObservableArray<TTAppTeam> = observable.array([]);
   _groups: IObservableValue<any> = observable.box(undefined);
   _lastUpdated: IObservableValue<?Date> = observable.box(undefined);
@@ -22,7 +23,7 @@ export class TTAppStore {
     return this._isEnabled.get();
   }
 
-  get club(): any {
+  get club(): Club {
     return this._club.get();
   }
 
@@ -34,7 +35,13 @@ export class TTAppStore {
     return this._eventStream;
   }
 
-  getMatchForWeek(weekOffset: number = 0): Array<any> | void {
+  getMatchesForWeek(
+    weekOffset: number = 0,
+  ): Array<{
+    team: TTAppTeam,
+    match: Match,
+    isLive: boolean,
+  }> | void {
     const date = moment(this._api.currentDate).add(weekOffset, 'week');
     const result = this.teams
       .map(team => {
@@ -46,7 +53,9 @@ export class TTAppStore {
         };
       })
       .filter(({ match }) => match)
+      // $$FlowFixMe
       .sort((a, b) => a.match.playtime.localeCompare(b.match.playtime));
+    // $$FlowFixMe
     return result.length ? result : undefined;
   }
 

@@ -1,4 +1,5 @@
 /* @flow */
+import type { Poule, Match, Club, Group, Semester } from './types';
 
 const ENABLE_CACHE = false;
 
@@ -42,7 +43,7 @@ export class TTAppAPI {
     }
 
     const body = JSON.stringify(fields);
-    //console.log(`FETCHing ${body}...`);
+    console.log(`FETCHing ${body}...`);
     try {
       const response = await fetch('https://ttapp.nl/api', {
         method: 'post',
@@ -50,10 +51,10 @@ export class TTAppAPI {
       });
       if (response.status !== 200)
         throw new Error(`Invalid status: ${response.status}`);
-      //console.log(`FETCHing DONE (status: ${response.status})`);
+      console.log(`FETCHing DONE (status: ${response.status})`);
       const json = await response.json();
       localStorage.setItem(cacheKey, JSON.stringify(json));
-      // console.log(json);
+      console.log(json);
       return json;
     } catch (err) {
       console.log(`FETCH FAILED (${err.message})`);
@@ -70,7 +71,14 @@ export class TTAppAPI {
     this._tokenCorrection = 1e3 * this._token - new Date().getTime();
   }
 
-  getTeams(clubId: string, semester: number = 0): Promise<any> {
+  getTeams(
+    clubId: string,
+    semester: number = 0,
+  ): Promise<{
+    club: Club,
+    groups: Array<Group>,
+    semesters: Array<Semester>,
+  }> {
     if (!semester) {
       const date = new Date();
       semester = date.getFullYear() * 10 + (date.getMonth() > 6 ? 2 : 1);
@@ -83,7 +91,7 @@ export class TTAppAPI {
     });
   }
 
-  getPoule(teamId: string): Promise<any> {
+  getPoule(teamId: string): Promise<Poule> {
     return this.request({
       task: 'poule',
       p: teamId,
@@ -91,7 +99,7 @@ export class TTAppAPI {
     });
   }
 
-  getMatch(matchId: string): Promise<any> {
+  getMatch(matchId: string): Promise<Match> {
     return this.request({
       task: 'match',
       matchid: matchId,

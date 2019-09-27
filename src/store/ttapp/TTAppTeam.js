@@ -4,6 +4,7 @@ import type { IObservableValue } from 'mobx';
 import { TTAppAPI } from './TTAppAPI';
 import moment from 'moment';
 import { TTAppEventStream } from './TTAppEventStream';
+import type { Match } from './types';
 
 export class TTAppTeam {
   _api: TTAppAPI;
@@ -77,11 +78,11 @@ export class TTAppTeam {
     this._interval = undefined;
   }
 
-  get players(): Array<any> {
+  get players(): Array<string> {
     return this._team.players;
   }
 
-  get matches(): Array<any> {
+  get matches(): Array<Match> {
     return (this._poule.get().matches || []).filter(
       match => match.team1id === this.teamId || match.team2id === this.teamId,
     );
@@ -91,7 +92,7 @@ export class TTAppTeam {
     return this._lastUpdated.get();
   }
 
-  getMatchForWeek(mom?: any): any {
+  getMatchForWeek(mom?: any): ?Match {
     const { matches } = this;
     mom = mom || moment(this._api.currentDate);
     const startOfWeek = mom.startOf('week').format('YYYY-MM-DD');
@@ -101,7 +102,7 @@ export class TTAppTeam {
     );
   }
 
-  isMatchLive(match: any): boolean {
+  isMatchLive(match: Match): boolean {
     const curtime = moment(this._api.currentDate).format('YYYY-MM-DD HH:mm:ss');
     const endtime = moment(match.playdate)
       .startOf('day')
@@ -115,7 +116,7 @@ export class TTAppTeam {
     );
   }
 
-  get liveMatch(): any {
+  get liveMatch(): ?Match {
     return this.matches.find(match => this.isMatchLive(match));
   }
 
@@ -151,7 +152,7 @@ export class TTAppTeam {
     return this._group.groupname;
   }
 
-  _onMatchUpdated(prevMatch: any, match: any) {
+  _onMatchUpdated(prevMatch: Match, match: Match) {
     const team1Scored = (match.score1 || 0) > (prevMatch.score1 || 0);
     this._eventStream.push({
       team: this,

@@ -276,16 +276,17 @@ export const TTAppSidebar = observer(
     }
 
     render() {
+      const { store } = this.props;
       const { pageIndex } = this.state;
 
       let matches;
       for (let i = 0; i < 6; i++) {
-        matches = this.props.store.getMatchForWeek(i);
+        matches = store.getMatchesForWeek(i);
         if (matches) {
           if (pageIndex === PageIndex.PREVIOUS) {
             matches = undefined;
             for (let j = i - 1; j <= i - 6; j--) {
-              matches = this.props.store.getMatchForWeek(j);
+              matches = store.getMatchesForWeek(j);
               if (matches) break;
             }
           }
