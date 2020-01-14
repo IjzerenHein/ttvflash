@@ -12,6 +12,7 @@
   },
   "workbench.colorCustomizations": {
     "activityBar.background": "#dc0301",
+    "activityBar.activeBorder": "#01be03",
     "activityBar.foreground": "#e7e7e7",
     "activityBar.inactiveForeground": "#e7e7e799",
     "activityBarBadge.background": "#01be03",
