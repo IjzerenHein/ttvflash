@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import UniversalRouter from 'universal-router/main.js';
+import UniversalRouter from 'universal-router';
 import { setActivePresentation } from '../store';
 import Toolbar from '../components/App/Toolbar';
 
