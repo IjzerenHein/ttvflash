@@ -3,6 +3,34 @@ import type { Poule, Match, Club, Group, Semester } from './types';
 
 const ENABLE_CACHE = false;
 
+/* Reserve engineered from ttapp */
+function decodeGDResponse(_0x3e8d2f) {
+  function decode(_0x3e8d2f) {
+    return decodeURIComponent(
+      Array['prototype']['map']
+        ['call'](atob(_0x3e8d2f['replace'](/\s/g, '')), function(_0x3e8d2f) {
+          return (
+            '%' +
+            ('00' + _0x3e8d2f['charCodeAt'](0x0)['toString'](0x10))['slice'](
+              -0x2,
+            )
+          );
+        })
+        ['join'](''),
+    );
+  }
+  const _0x510d78 = _0x3e8d2f['match'](/^(.)(.)/);
+  return decode(
+    _0x3e8d2f['replace'](new RegExp(_0x510d78[0x2], 'g'), '@')
+      ['replace'](/A/g, _0x510d78[0x2])
+      ['replace'](/@/g, 'A')
+      ['replace'](new RegExp(_0x510d78[0x1], 'g'), '@')
+      ['replace'](/e/g, _0x510d78[0x1])
+      ['replace'](/@/g, 'e')
+      ['replace'](/^../, 'ey'),
+  );
+}
+
 export class TTAppAPI {
   _token = undefined;
   _uid = undefined;
@@ -17,7 +45,7 @@ export class TTAppAPI {
       return json;
     }
 
-    fields.c = 'site-300';
+    fields.c = 'site-306';
     if (this._uid) fields.uid = this._uid;
     if (this._token) {
       var t = (
@@ -52,7 +80,8 @@ export class TTAppAPI {
       if (response.status !== 200)
         throw new Error(`Invalid status: ${response.status}`);
       //console.log(`FETCHing DONE (status: ${response.status})`);
-      const json = await response.json();
+      const encodedJson = await response.json();
+      const json = JSON.parse(decodeGDResponse(encodedJson.gd));
       localStorage.setItem(cacheKey, JSON.stringify(json));
       //console.log(json);
       return json;
@@ -95,7 +124,7 @@ export class TTAppAPI {
     return this.request({
       task: 'poule',
       p: teamId,
-      tab: 'w',
+      tab: 'm',
     });
   }
 
