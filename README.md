@@ -1,5 +1,7 @@
 # TTVFlash Presentation App
 
+[![CircleCI](https://circleci.com/gh/IjzerenHein/ttvflash.svg?style=svg)](https://circleci.com/gh/IjzerenHein/ttvflash)
+
 ## Installation
 
 Clone this repo and run `yarn install`
