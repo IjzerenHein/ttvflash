@@ -6,7 +6,7 @@ import App from './components/App';
 import { auth } from './store';
 import history from './history';
 import routes from './routes';
-import registerServiceWorker from './registerServiceWorker';
+import * as serviceWorker from './serviceWorker';
 import { version } from '../package.json';
 
 console.log(`TTVFlash Presentatie App v${version} 🏓`);
@@ -47,4 +47,7 @@ auth.onAuthStateChanged(user => {
   promise = resolve(promise.then(x => ({ ...x, user })));
 });
 
-registerServiceWorker();
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.register();
