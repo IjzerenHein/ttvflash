@@ -18,11 +18,11 @@ jobs:
           key: yarn-v1-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn/v1
-      - run:
-          name: Test
-          command: |
-            yarn lint
-            yarn test --forceExit
+      #     - run:
+      #          name: Test
+      #          command: |
+      #            yarn lint
+      #            yarn test --forceExit
       - run:
           name: Build
           command: yarn build
