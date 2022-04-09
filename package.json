@@ -13,7 +13,7 @@
     "material-ui-icons": "^1.0.0-beta.17",
     "mobx": "^5.15.2",
     "mobx-react": "^6.1.5",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "parse-url": "^5.0.1",
     "prop-types": "^15.7.2",
     "query-string": "^6.9.0",
