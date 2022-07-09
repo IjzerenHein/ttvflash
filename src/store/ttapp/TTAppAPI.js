@@ -8,7 +8,7 @@ function decodeGDResponse(_0x3e8d2f) {
   function decode(_0x3e8d2f) {
     return decodeURIComponent(
       Array['prototype']['map']
-        ['call'](atob(_0x3e8d2f['replace'](/\s/g, '')), function(_0x3e8d2f) {
+        ['call'](atob(_0x3e8d2f['replace'](/\s/g, '')), function (_0x3e8d2f) {
           return (
             '%' +
             ('00' + _0x3e8d2f['charCodeAt'](0x0)['toString'](0x10))['slice'](
@@ -45,7 +45,7 @@ export class TTAppAPI {
       return json;
     }
 
-    fields.c = 'site-306';
+    fields.c = 'site-324';
     if (this._uid) fields.uid = this._uid;
     if (this._token) {
       var t = (
